@@ -1,0 +1,135 @@
+package io.github.singlerr.semaphore.client.gui.components.apps
+
+import gg.essential.elementa.UIComponent
+import gg.essential.elementa.components.ScrollComponent
+import gg.essential.elementa.components.UIBlock
+import gg.essential.elementa.constraints.CenterConstraint
+import gg.essential.elementa.constraints.SiblingConstraint
+import gg.essential.elementa.dsl.*
+import gg.essential.elementa.state.BasicState
+import gg.essential.elementa.state.State
+import gg.essential.universal.UMinecraft
+import io.github.singlerr.semaphore.client.gui.ICON_ADDRESS_BOOK
+import io.github.singlerr.semaphore.client.gui.Memoize
+import io.github.singlerr.semaphore.client.gui.components.UIAppIcon
+import io.github.singlerr.semaphore.client.gui.components.UIInteractor
+import io.github.singlerr.semaphore.client.gui.widgets.*
+import io.github.singlerr.semaphore.interactors.admin.presenter.data.PresentableEntity
+import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
+import io.github.singlerr.semaphore.interactors.caller.controller.data.CallRequest
+import java.awt.Color
+import java.util.*
+
+class AppAddressBook(
+    navigator: GuiNavigator,
+    private val entries: State<PlayerEntryList>,
+    private val callRequestController: CallRequestController
+) : UIApp(navigator), UIInteractor {
+
+    override val onShow: UIComponent.() -> Unit = { defaultConstraint() }
+
+    init {
+        UIBlock(Color(230, 240, 240)).constrain {
+            x = CenterConstraint()
+            y = CenterConstraint()
+
+            width = 100.percent()
+            height = 100.percent()
+        } childOf this
+        val entryList =
+            ScrollComponent().constrain {
+                x = 0.pixels()
+                y = 0.pixels()
+
+                width = 100.percent()
+                height = 100.percent()
+            } childOf this
+        val apply: (PlayerEntryList) -> Unit = { list ->
+            for (entry in list.entries) {
+                UIPlayerEntry(entry, callRequestController)
+                    .constrain {
+                        x = CenterConstraint()
+                        y = SiblingConstraint(padding = 1f)
+
+                        width = 100.pixels()
+                        height = 22.pixels()
+                    }
+                    .also {
+                        it.onClickRequestButton = {
+                            callRequestController.request(
+                                CallRequest(UMinecraft.getMinecraft().player.uniqueID, entry.id)
+                            )
+
+                            navigator.push(
+                                AppCallRequesting(
+                                    navigator = navigator,
+                                    callerInformation =
+                                        CallerInformation(
+                                            UMinecraft.getMinecraft().player.uniqueID,
+                                            UMinecraft.getMinecraft().player.name
+                                        ),
+                                    calleeInformation = CalleeInformation(entry.id, entry.name),
+                                    callRequestController = callRequestController
+                                )
+                            )
+                        }
+                    } childOf entryList
+            }
+        }
+
+        (0 until 10).map {
+            PresentableEntity(UUID.randomUUID(), PresentableEntity.State(0, HashMap()))
+        }
+        entries.onSetValue(apply)
+        apply(entries.getOrDefault(PlayerEntryList(emptyList())))
+    }
+
+    override fun shouldPresent(entities: List<PresentableEntity>?): Boolean = true
+    override fun shouldPresent(entity: PresentableEntity?): Boolean = true
+
+    override fun present(entities: MutableList<PresentableEntity>?) {
+        entries.set(
+            PlayerEntryList(
+                entities
+                    ?.map {
+                        PlayerEntry(
+                            it.id(),
+                            getPlayerProfile(it.id())?.name ?: "",
+                            BasicState(it.state().missCallCount().getOrElse(it.id()) { 0 })
+                        )
+                    }
+                    ?.toList()
+                    ?: emptyList()
+            )
+        )
+    }
+
+    override fun present(entity: PresentableEntity?) {
+        entries
+            .get()
+            .entries
+            .find { it.id == entity?.id() }
+            ?.missCallCount
+            ?.set(entity?.state()?.missCallCount()?.get(entity.id()) ?: return)
+    }
+}
+
+class IconAddressBook(navigator: GuiNavigator, callRequestController: CallRequestController) :
+    UIAppIcon(resourceLocation = ICON_ADDRESS_BOOK, iconName = BasicState("Address")) {
+    init {
+        onMouseClick {
+            addressBookInstance(AddressBookParams(navigator, callRequestController)).open()
+        }
+    }
+}
+
+val playerEntryList: State<PlayerEntryList> = BasicState(PlayerEntryList(mutableListOf()))
+
+val addressBookInstance: (AddressBookParams) -> AppAddressBook by Memoize { param ->
+    AppAddressBook(param.navigator, playerEntryList, param.requestController)
+}
+
+data class AddressBookParams(
+    val navigator: GuiNavigator,
+    val requestController: CallRequestController
+)
