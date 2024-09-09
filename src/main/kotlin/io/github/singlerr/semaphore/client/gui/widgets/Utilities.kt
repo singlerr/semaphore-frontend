@@ -35,6 +35,17 @@ fun UIComponent.defaultConstraint(): UIComponent {
     return this
 }
 
+fun UIComponent.innerConstraint(): UIComponent {
+    constrain {
+        x = 0.pixels()
+        y = 0.pixels()
+
+        width = 100.percent()
+        height = 100.percent()
+    }
+    return this
+}
+
 fun UIComponent.defaultConstraint(parent: UIComponent): UIComponent {
     constrain {
         x = 4.pixels() boundTo parent

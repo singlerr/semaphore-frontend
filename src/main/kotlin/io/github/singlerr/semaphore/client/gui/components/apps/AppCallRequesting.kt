@@ -1,5 +1,7 @@
 package io.github.singlerr.semaphore.client.gui.components.apps
 
+import gg.essential.elementa.UIComponent
+import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.ImageAspectConstraint
@@ -10,10 +12,12 @@ import io.github.singlerr.semaphore.client.gui.components.UIInteractor
 import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
 import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackground
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
-import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
+import io.github.singlerr.semaphore.client.gui.widgets.innerConstraint
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
+import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.controller.data.CallRequest
+import java.awt.Color
 import java.util.UUID
 
 class AppCallRequesting(
@@ -23,17 +27,22 @@ class AppCallRequesting(
     private val callRequestController: CallRequestController
 ) : UIApp(navigator), UIInteractor {
 
+    override val onShow: UIComponent.() -> Unit = { parent.unhide() }
+
+    private val background: UIComponent
+
     init {
 
-        defaultConstraint()
+        innerConstraint()
 
-        UIBlurredGradientBackground(delta = 0.0005f).constrain {
-            x = 0.pixels()
-            y = 0.pixels()
+        background =
+            UIBlurredGradientBackground(delta = 0.0005f).constrain {
+                x = 0.pixels()
+                y = 0.pixels()
 
-            width = 100.percent()
-            height = 100.percent()
-        } childOf this
+                width = 100.percent()
+                height = 100.percent()
+            } childOf this
 
         UIHead(calleeInformation.id).constrain {
             x = CenterConstraint()
@@ -65,6 +74,8 @@ class AppCallRequesting(
                 callRequestController.request(
                     CallRequest(callerInformation.id, calleeInformation.id)
                 )
+
+                exit()
             } childOf this
     }
 
@@ -72,6 +83,24 @@ class AppCallRequesting(
     override fun presentError(error: ErrorEntity?) {
         navigator.pop()
         // Play sound here
+    }
+
+    override fun shouldPresent(entity: CallResponse?): Boolean = true
+    override fun present(entity: CallResponse?) {
+        if (entity?.responseType() == CallResponse.ResponseType.ACCEPT) {
+            replaceChild(
+                UIBlock(Color.GREEN).constrain {
+                    x = 0.pixels()
+                    y = 0.pixels()
+
+                    width = 100.percent()
+                    height = 100.percent()
+                },
+                background
+            )
+        } else {
+            exit()
+        }
     }
 }
 

@@ -26,9 +26,11 @@ class AppAddressBook(
     private val callRequestController: CallRequestController
 ) : UIApp(navigator), UIInteractor {
 
-    override val onShow: UIComponent.() -> Unit = { defaultConstraint() }
+    override val onShow: UIComponent.() -> Unit = {}
 
     init {
+        defaultConstraint()
+
         UIBlock(Color(230, 240, 240)).constrain {
             x = CenterConstraint()
             y = CenterConstraint()
@@ -45,6 +47,7 @@ class AppAddressBook(
                 height = 100.percent()
             } childOf this
         val apply: (PlayerEntryList) -> Unit = { list ->
+            entryList.clearChildren()
             for (entry in list.entries) {
                 UIPlayerEntry(entry, callRequestController)
                     .constrain {
@@ -73,15 +76,22 @@ class AppAddressBook(
                                 )
                             )
                         }
-                    } childOf entryList
+                    }
+                    .onMouseClick { this@AppAddressBook.grabWindowFocus() } childOf entryList
             }
-        }
-
-        (0 until 10).map {
-            PresentableEntity(UUID.randomUUID(), PresentableEntity.State(0, HashMap()))
         }
         entries.onSetValue(apply)
         apply(entries.getOrDefault(PlayerEntryList(emptyList())))
+        apply(
+            PlayerEntryList(
+                (0 until 10)
+                    .map {
+                        PresentableEntity(UUID.randomUUID(), PresentableEntity.State(0, HashMap()))
+                    }
+                    .map { PlayerEntry(it.id(), it.id().toString(), BasicState(0)) }
+                    .toList()
+            )
+        )
     }
 
     override fun shouldPresent(entities: List<PresentableEntity>?): Boolean = true

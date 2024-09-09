@@ -1,6 +1,5 @@
 package io.github.singlerr.semaphore.client.gui
 
-import com.google.common.base.Suppliers
 import io.github.singlerr.access.semaphore.client.gui.NonVanillaScreenAccess
 import io.github.singlerr.semaphore.config.ConfigurationManager
 import io.github.singlerr.semaphore.config.entry.ObservableConfigEntry
@@ -26,13 +25,15 @@ import org.lwjgl.input.Keyboard
 class SemaphoreGuiModule {
 
     var screen: Supplier<GuiPhoneScreen> =
-        Suppliers.memoize {
-            GuiPhoneScreen(
-                StubRequestController(),
-                StubResponseController(),
-                StubEntityController(),
-                ObservableConfigEntry(HashMap<String, Double>())
-            )
+        object : Supplier<GuiPhoneScreen> {
+            override fun get(): GuiPhoneScreen {
+                return GuiPhoneScreen(
+                    StubRequestController(),
+                    StubResponseController(),
+                    StubEntityController(),
+                    ObservableConfigEntry(HashMap<String, Double>())
+                )
+            }
         }
 
     val keyOpenScreen = KeyBinding("Open", Keyboard.KEY_B, "key.categories.misc")

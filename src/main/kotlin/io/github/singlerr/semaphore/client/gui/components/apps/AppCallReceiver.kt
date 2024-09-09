@@ -6,6 +6,7 @@ import gg.essential.elementa.constraints.ImageAspectConstraint
 import gg.essential.elementa.dsl.*
 import gg.essential.universal.UMinecraft
 import io.github.singlerr.semaphore.client.gui.BMJUA
+import io.github.singlerr.semaphore.client.gui.ICON_ACCEPT_CALL
 import io.github.singlerr.semaphore.client.gui.ICON_REJECT_CALL
 import io.github.singlerr.semaphore.client.gui.components.UIInteractor
 import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
@@ -52,13 +53,30 @@ class AppCallReceiver(
 
             fontProvider = BMJUA
         } childOf this
-
-        UIResourceImage(ICON_REJECT_CALL)
+        UIResourceImage(ICON_ACCEPT_CALL)
             .constrain {
-                x = CenterConstraint()
+                x = 10.pixels()
                 y = 30.pixels(alignOpposite = true)
 
-                width = 50.pixels()
+                width = 20.pixels()
+                height = ImageAspectConstraint()
+            }
+            .onMouseClick {
+                callResponseController.reply(
+                    CallResponse(
+                        info.id,
+                        UMinecraft.getMinecraft().player.uniqueID,
+                        CallResponse.Response.ACCEPT
+                    )
+                )
+                navigator.pop()
+            } childOf this
+        UIResourceImage(ICON_REJECT_CALL)
+            .constrain {
+                x = 10.pixels(alignOpposite = true)
+                y = 30.pixels(alignOpposite = true)
+
+                width = 20.pixels()
                 height = ImageAspectConstraint()
             }
             .onMouseClick {

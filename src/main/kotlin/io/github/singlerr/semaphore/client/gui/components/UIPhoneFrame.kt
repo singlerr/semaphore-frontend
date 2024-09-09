@@ -5,13 +5,12 @@ import gg.essential.elementa.constraints.ImageAspectConstraint
 import gg.essential.elementa.dsl.*
 import io.github.singlerr.semaphore.client.ConfigHolder
 import io.github.singlerr.semaphore.client.gui.IMAGE_BACKGROUND
-import io.github.singlerr.semaphore.client.gui.components.apps.IconAddressBook
-import io.github.singlerr.semaphore.client.gui.components.apps.IconSettings
-import io.github.singlerr.semaphore.client.gui.components.apps.IconUserRegistration
+import io.github.singlerr.semaphore.client.gui.components.apps.*
 import io.github.singlerr.semaphore.client.gui.widgets.*
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.PresentableEntity
+import io.github.singlerr.semaphore.interactors.callee.controller.CallResponseController
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.Error
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
@@ -20,6 +19,7 @@ import io.github.singlerr.semaphore.interactors.caller.presenter.data.InverseCal
 class UIPhoneFrame(
     override val navigator: GuiNavigator,
     callRequestController: CallRequestController,
+    private val callResponseController: CallResponseController,
     entityController: EntityController,
     config: ConfigHolder
 ) :
@@ -48,7 +48,10 @@ class UIPhoneFrame(
                 .defaultConstraint(this@UIPhoneFrame) childOf this
 
         onHide = { appContainer.hide(true) }
-        onShow = { appContainer.unhide(true) }
+        onShow = {
+            appContainer.unhide(true)
+            grabWindowFocus()
+        }
     }
 
     override fun presentError(error: ErrorEntity?) {}
@@ -57,11 +60,45 @@ class UIPhoneFrame(
 
     override fun present(entities: MutableList<PresentableEntity>?) {}
 
-    override fun present(request: InverseCallRequest?) {}
+    override fun present(request: InverseCallRequest?) {
+        navigator.push(
+            AppCallReceiver(
+                navigator = navigator,
+                info =
+                    CallerInformation(
+                        request!!.callerId(),
+                        getPlayerProfile(request.callerId())?.name!!
+                    ),
+                callResponseController = callResponseController
+            )
+        )
+    }
 
     override fun present(entity: CallResponse?) {}
 
     override fun error(entity: Error?) {}
+
+    override fun shouldPresent(request: InverseCallRequest?): Boolean = true
+
+    override fun shouldPresent(entities: List<PresentableEntity>?): Boolean {
+        return true
+    }
+
+    override fun shouldPresent(entity: CallResponse?): Boolean {
+        return true
+    }
+
+    override fun shouldPresent(entity: kotlin.Error?): Boolean {
+        return true
+    }
+
+    override fun shouldPresent(entity: PresentableEntity?): Boolean {
+        return true
+    }
+
+    override fun shouldPresent(error: ErrorEntity?): Boolean {
+        return true
+    }
 
     companion object {
         private val appList:

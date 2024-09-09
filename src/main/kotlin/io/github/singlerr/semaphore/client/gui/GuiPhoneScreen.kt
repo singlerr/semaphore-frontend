@@ -12,6 +12,7 @@ import io.github.singlerr.semaphore.client.gui.components.UIPhoneFrame
 import io.github.singlerr.semaphore.client.gui.widgets.*
 import io.github.singlerr.semaphore.config.entry.ObservableConfigEntry
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
+import io.github.singlerr.semaphore.interactors.admin.controller.data.EntityQuery
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.PresentableEntity
 import io.github.singlerr.semaphore.interactors.callee.controller.CallResponseController
@@ -41,6 +42,7 @@ class GuiPhoneScreen(
                 this.onShow()
             }
             grabWindowFocus()
+            entityController.getAllEntities(EntityQuery.GetAllEntities())
             return@GuiNavigator
         }
     }
@@ -48,7 +50,13 @@ class GuiPhoneScreen(
     init {
 
         navigatorImpl.push(
-            UIPhoneFrame(navigatorImpl, callRequestController, entityController, configHolder)
+            UIPhoneFrame(
+                navigatorImpl,
+                callRequestController,
+                callResponseController,
+                entityController,
+                configHolder
+            )
         )
 
         //        navigatorImpl.push(
