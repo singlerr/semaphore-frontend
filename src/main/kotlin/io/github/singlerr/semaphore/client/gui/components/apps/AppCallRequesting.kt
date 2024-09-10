@@ -12,6 +12,7 @@ import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
 import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackground
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
+import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
@@ -22,7 +23,8 @@ class AppCallRequesting(
     navigator: GuiNavigator,
     callerInformation: CallerInformation,
     calleeInformation: CalleeInformation,
-    private val callRequestController: CallRequestController
+    private val callRequestController: CallRequestController,
+    private val callStateController: CallStateController
 ) : UIApp(navigator), UIInteractor {
 
     override val onShow: UIComponent.() -> Unit = { parent.unhide() }
@@ -77,18 +79,26 @@ class AppCallRequesting(
 
     override fun shouldPresent(entity: Error?): Boolean = true
     override fun presentError(error: ErrorEntity?) {
-        navigator.pop()
+       exit()
         // Play sound here
     }
 
     override fun shouldPresent(entity: CallResponse?): Boolean = true
     override fun present(entity: CallResponse?) {
+        exit()
         if (entity?.responseType() == CallResponse.ResponseType.ACCEPT) {
             navigator.push(
-                AppCall(navigator = navigator, information = CallInformation(entity.calleeId()))
+                AppCall(
+                    navigator = navigator,
+                    information =
+                        CallInformation(
+                            opponentId = entity.calleeId(),
+                            callerId = entity.callerId(),
+                            calleeId = entity.calleeId()
+                        ),
+                    callStateController = callStateController
+                )
             )
-        } else {
-            exit()
         }
     }
 }

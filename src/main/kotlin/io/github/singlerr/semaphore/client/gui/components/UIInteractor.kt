@@ -6,9 +6,11 @@ import io.github.singlerr.semaphore.interactors.admin.presenter.data.Presentable
 import io.github.singlerr.semaphore.interactors.callee.presenter.CallResponsePresenter
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
 import io.github.singlerr.semaphore.interactors.caller.presenter.CallRequestPresenter
+import io.github.singlerr.semaphore.interactors.caller.presenter.ErrorPresenter
 import io.github.singlerr.semaphore.interactors.caller.presenter.data.InverseCallRequest
 
-interface UIInteractor : EntityPresenter, CallRequestPresenter, CallResponsePresenter {
+interface UIInteractor :
+    EntityPresenter, CallRequestPresenter, CallResponsePresenter, ErrorPresenter {
 
     fun shouldPresent(entity: PresentableEntity?): Boolean = false
     fun shouldPresent(entities: List<PresentableEntity>?): Boolean = false
@@ -16,6 +18,9 @@ interface UIInteractor : EntityPresenter, CallRequestPresenter, CallResponsePres
     fun shouldPresent(request: InverseCallRequest?): Boolean = false
     fun shouldPresent(entity: CallResponse?): Boolean = false
     fun shouldPresent(entity: Error?): Boolean = false
+    fun shouldPresent(
+        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
+    ) = false
 
     override fun presentError(error: ErrorEntity?) {}
     override fun present(entity: PresentableEntity?) {}
@@ -24,5 +29,9 @@ interface UIInteractor : EntityPresenter, CallRequestPresenter, CallResponsePres
     override fun present(entity: CallResponse?) {}
     override fun error(
         entity: io.github.singlerr.semaphore.interactors.callee.presenter.data.Error?
+    ) {}
+
+    override fun present(
+        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
     ) {}
 }

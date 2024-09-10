@@ -11,6 +11,7 @@ import io.github.singlerr.semaphore.client.gui.components.UINavigable
 import io.github.singlerr.semaphore.client.gui.components.UIPhoneFrame
 import io.github.singlerr.semaphore.client.gui.widgets.*
 import io.github.singlerr.semaphore.config.entry.ObservableConfigEntry
+import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
 import io.github.singlerr.semaphore.interactors.admin.controller.data.EntityQuery
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
@@ -18,6 +19,7 @@ import io.github.singlerr.semaphore.interactors.admin.presenter.data.Presentable
 import io.github.singlerr.semaphore.interactors.callee.controller.CallResponseController
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
+import io.github.singlerr.semaphore.interactors.caller.presenter.data.Error
 import io.github.singlerr.semaphore.interactors.caller.presenter.data.InverseCallRequest
 import java.util.*
 
@@ -25,6 +27,7 @@ class GuiPhoneScreen(
     private val callRequestController: CallRequestController,
     private val callResponseController: CallResponseController,
     private val entityController: EntityController,
+    private val callStateController: CallStateController,
     private val volumeConfig: ObservableConfigEntry<Map<String, Double>>
 ) : WindowScreen(ElementaVersion.V6), UIInteractor, NonVanillaScreen {
 
@@ -55,6 +58,7 @@ class GuiPhoneScreen(
                 callRequestController,
                 callResponseController,
                 entityController,
+                callStateController,
                 configHolder
             )
         )
@@ -107,5 +111,12 @@ class GuiPhoneScreen(
         navigatorImpl.pages
             .filter { it is UIInteractor && it.shouldPresent(error) }
             .forEach { (it as UIInteractor).presentError(error) }
+    }
+
+    override fun present(error: Error?) {
+        println(error)
+        navigatorImpl.pages
+            .filter { it is UIInteractor && it.shouldPresent(error) }
+            .forEach { (it as UIInteractor).present(error) }
     }
 }

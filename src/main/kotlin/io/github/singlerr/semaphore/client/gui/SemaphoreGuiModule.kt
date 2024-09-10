@@ -3,7 +3,9 @@ package io.github.singlerr.semaphore.client.gui
 import io.github.singlerr.access.semaphore.client.gui.NonVanillaScreenAccess
 import io.github.singlerr.semaphore.config.ConfigurationManager
 import io.github.singlerr.semaphore.config.entry.ObservableConfigEntry
+import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
+import io.github.singlerr.semaphore.interactors.admin.controller.data.CallStateQuery
 import io.github.singlerr.semaphore.interactors.admin.controller.data.EntityQuery
 import io.github.singlerr.semaphore.interactors.callee.controller.CallResponseController
 import io.github.singlerr.semaphore.interactors.callee.controller.data.CallResponse
@@ -31,6 +33,7 @@ class SemaphoreGuiModule {
                     StubRequestController(),
                     StubResponseController(),
                     StubEntityController(),
+                    StubCallStateController(),
                     ObservableConfigEntry(HashMap<String, Double>())
                 )
             }
@@ -56,12 +59,13 @@ class SemaphoreGuiModule {
                     callRequestController = params.callRequestController,
                     callResponseController = params.callResponseController,
                     entityController = params.entityController,
+                    callStateController = params.callStateController,
                     volumeConfig = volumeConfig!!
                 )
             params.entityPresenterRegistry?.accept(screen)
             params.callRequestPresenterRegistry?.accept(screen)
             params.callResponsePresenterRegistry?.accept(screen)
-
+            params.errorPresenterRegistry?.accept(screen)
             return@setFactory screen
         }
     }
@@ -71,6 +75,14 @@ class SemaphoreGuiModule {
         if (keyOpenScreen.isPressed && Minecraft.getMinecraft().currentScreen !is GuiPhoneScreen) {
             screen.get().apply { Minecraft.getMinecraft().displayGuiScreen(this) }
         }
+    }
+
+    private class StubCallStateController : CallStateController {
+        override fun openCall(query: CallStateQuery.OpenCall?) {}
+
+        override fun closeCall(query: CallStateQuery.CloseCall?) {}
+
+        override fun closeCall(query: CallStateQuery.CloseCallById?) {}
     }
 
     private class StubRequestController : CallRequestController {

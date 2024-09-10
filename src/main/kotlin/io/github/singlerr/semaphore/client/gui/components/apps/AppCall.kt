@@ -14,13 +14,18 @@ import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackgrou
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
 import io.github.singlerr.semaphore.client.gui.widgets.getPlayerProfile
+import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
+import io.github.singlerr.semaphore.interactors.admin.controller.data.CallStateQuery
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
 import java.awt.Color
 import java.util.UUID
 
-class AppCall(navigator: GuiNavigator, information: CallInformation) :
-    UIApp(navigator), UIInteractor {
+class AppCall(
+    navigator: GuiNavigator,
+    information: CallInformation,
+    callStateController: CallStateController
+) : UIApp(navigator), UIInteractor {
 
     override val onShow: UIComponent.() -> Unit = { parent.unhide() }
 
@@ -37,7 +42,7 @@ class AppCall(navigator: GuiNavigator, information: CallInformation) :
                 height = 100.percent()
             } childOf this
 
-        UIHead(information.id).constrain {
+        UIHead(information.opponentId).constrain {
             x = CenterConstraint()
             y = 30.pixels()
 
@@ -45,7 +50,7 @@ class AppCall(navigator: GuiNavigator, information: CallInformation) :
             height = ImageAspectConstraint()
         } childOf this
 
-        val name = getPlayerProfile(information.id)?.name
+        val name = getPlayerProfile(information.opponentId)?.name
         UIText(name!!, shadow = false).constrain {
             x = CenterConstraint()
             y = 70.pixels()
@@ -65,7 +70,9 @@ class AppCall(navigator: GuiNavigator, information: CallInformation) :
                 height = ImageAspectConstraint()
             }
             .onMouseClick {
-                // TODO: Close call
+                callStateController.closeCall(
+                    CallStateQuery.CloseCall(information.callerId, information.calleeId)
+                )
                 exit()
             } childOf this
     }
@@ -95,4 +102,4 @@ class AppCall(navigator: GuiNavigator, information: CallInformation) :
     }
 }
 
-data class CallInformation(val id: UUID)
+data class CallInformation(val opponentId: UUID, val callerId: UUID, val calleeId: UUID)

@@ -14,6 +14,7 @@ import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
 import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackground
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
+import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.controller.CallResponseController
 import io.github.singlerr.semaphore.interactors.callee.controller.data.CallResponse
@@ -21,8 +22,9 @@ import java.util.UUID
 
 class AppCallReceiver(
     navigator: GuiNavigator,
-    info: CallerInformation,
-    private val callResponseController: CallResponseController
+    private val info: CallerInformation,
+    private val callResponseController: CallResponseController,
+    private val callStateController: CallStateController
 ) : UIApp(navigator), UIInteractor {
 
     override val onShow: UIComponent.() -> Unit = { parent.unhide(true) }
@@ -70,7 +72,19 @@ class AppCallReceiver(
                         CallResponse.Response.ACCEPT
                     )
                 )
-                navigator.pop()
+                exit()
+                navigator.push(
+                    AppCall(
+                        navigator = navigator,
+                        information =
+                            CallInformation(
+                                opponentId = info.id,
+                                callerId = info.id,
+                                calleeId = UMinecraft.getMinecraft().player.uniqueID
+                            ),
+                        callStateController = callStateController
+                    )
+                )
             } childOf this
         UIResourceImage(ICON_REJECT_CALL)
             .constrain {
@@ -94,8 +108,47 @@ class AppCallReceiver(
 
     override fun shouldPresent(entity: Error?): Boolean = true
 
+    override fun shouldPresent(error: ErrorEntity?): Boolean =
+        error?.message()?.startsWith("error.call.closed") == true
+
+    override fun shouldPresent(
+        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
+    ): Boolean = true
+
+    override fun error(
+        entity: io.github.singlerr.semaphore.interactors.callee.presenter.data.Error?
+    ) {
+        exit()
+    }
+
+    override fun present(
+        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
+    ) {
+        exit()
+    }
+
     override fun presentError(error: ErrorEntity?) {
-        navigator.pop()
+        error?.let {
+            if (it.message().startsWith("error.call.closed")) {
+                val infoSection =
+                    it.message()
+                        .substring(
+                            it.message().indexOf("error.call.closed") + "error.call.closed".length
+                        )
+                if (infoSection.isEmpty()) return@let
+
+                val args = infoSection.split("|")
+                val callerId = UUID.fromString(args[0])
+                val calleeId = UUID.fromString(args[1])
+
+                // Exit only related with me
+                if (info.id == callerId && calleeId == UMinecraft.getMinecraft().player.uniqueID) {
+                    exit()
+                    return
+                }
+            }
+        }
+        exit()
     }
 }
 

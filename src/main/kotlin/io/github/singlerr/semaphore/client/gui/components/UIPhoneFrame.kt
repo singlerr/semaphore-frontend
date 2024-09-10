@@ -7,6 +7,7 @@ import io.github.singlerr.semaphore.client.ConfigHolder
 import io.github.singlerr.semaphore.client.gui.IMAGE_BACKGROUND
 import io.github.singlerr.semaphore.client.gui.components.apps.*
 import io.github.singlerr.semaphore.client.gui.widgets.*
+import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.PresentableEntity
@@ -21,6 +22,7 @@ class UIPhoneFrame(
     callRequestController: CallRequestController,
     private val callResponseController: CallResponseController,
     entityController: EntityController,
+    private val callStateController: CallStateController,
     config: ConfigHolder
 ) :
     UIResourceImage(IMAGE_BACKGROUND, cutRange = Box(x = 199, y = 0, width = 366, height = 767)),
@@ -43,7 +45,14 @@ class UIPhoneFrame(
         val appContainer =
             UIAppContainer(
                     navigator = navigator,
-                    apps = appList(navigator, callRequestController, entityController, config)
+                    apps =
+                        appList(
+                            navigator,
+                            callRequestController,
+                            entityController,
+                            config,
+                            callStateController
+                        )
                 )
                 .defaultConstraint(this@UIPhoneFrame) childOf this
 
@@ -69,7 +78,8 @@ class UIPhoneFrame(
                         request!!.callerId(),
                         getPlayerProfile(request.callerId())?.name!!
                     ),
-                callResponseController = callResponseController
+                callResponseController = callResponseController,
+                callStateController = callStateController
             )
         )
     }
@@ -102,12 +112,16 @@ class UIPhoneFrame(
 
     companion object {
         private val appList:
-            (GuiNavigator, CallRequestController, EntityController, config: ConfigHolder) -> List<
-                    UIAppIcon
-                > =
-            { navigator, reqController, entityController, config ->
+            (
+                GuiNavigator,
+                CallRequestController,
+                EntityController,
+                ConfigHolder,
+                CallStateController
+            ) -> List<UIAppIcon> =
+            { navigator, reqController, entityController, config, callStateController ->
                 listOf(
-                    IconAddressBook(navigator, reqController),
+                    IconAddressBook(navigator, reqController, callStateController),
                     IconSettings(navigator, config),
                     IconUserRegistration(navigator, entityController)
                 )

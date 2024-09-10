@@ -14,6 +14,7 @@ import io.github.singlerr.semaphore.client.gui.Memoize
 import io.github.singlerr.semaphore.client.gui.components.UIAppIcon
 import io.github.singlerr.semaphore.client.gui.components.UIInteractor
 import io.github.singlerr.semaphore.client.gui.widgets.*
+import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.PresentableEntity
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.controller.data.CallRequest
@@ -23,7 +24,8 @@ import java.util.*
 class AppAddressBook(
     navigator: GuiNavigator,
     private val entries: State<PlayerEntryList>,
-    private val callRequestController: CallRequestController
+    private val callRequestController: CallRequestController,
+    private val callStateController: CallStateController
 ) : UIApp(navigator), UIInteractor {
 
     override val onShow: UIComponent.() -> Unit = {}
@@ -72,7 +74,8 @@ class AppAddressBook(
                                             UMinecraft.getMinecraft().player.name
                                         ),
                                     calleeInformation = CalleeInformation(entry.id, entry.name),
-                                    callRequestController = callRequestController
+                                    callRequestController = callRequestController,
+                                    callStateController = callStateController
                                 )
                             )
                         }
@@ -125,11 +128,17 @@ class AppAddressBook(
     }
 }
 
-class IconAddressBook(navigator: GuiNavigator, callRequestController: CallRequestController) :
-    UIAppIcon(resourceLocation = ICON_ADDRESS_BOOK, iconName = BasicState("Address")) {
+class IconAddressBook(
+    navigator: GuiNavigator,
+    callRequestController: CallRequestController,
+    callStateController: CallStateController
+) : UIAppIcon(resourceLocation = ICON_ADDRESS_BOOK, iconName = BasicState("Address")) {
     init {
         onMouseClick {
-            addressBookInstance(AddressBookParams(navigator, callRequestController)).open()
+            addressBookInstance(
+                    AddressBookParams(navigator, callRequestController, callStateController)
+                )
+                .open()
         }
     }
 }
@@ -137,10 +146,16 @@ class IconAddressBook(navigator: GuiNavigator, callRequestController: CallReques
 val playerEntryList: State<PlayerEntryList> = BasicState(PlayerEntryList(mutableListOf()))
 
 val addressBookInstance: (AddressBookParams) -> AppAddressBook by Memoize { param ->
-    AppAddressBook(param.navigator, playerEntryList, param.requestController)
+    AppAddressBook(
+        param.navigator,
+        playerEntryList,
+        param.requestController,
+        param.callStateController
+    )
 }
 
 data class AddressBookParams(
     val navigator: GuiNavigator,
-    val requestController: CallRequestController
+    val requestController: CallRequestController,
+    val callStateController: CallStateController
 )
