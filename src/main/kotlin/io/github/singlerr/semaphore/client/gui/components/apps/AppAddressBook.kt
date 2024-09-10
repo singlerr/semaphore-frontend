@@ -101,6 +101,7 @@ class AppAddressBook(
         entries.set(
             PlayerEntryList(
                 entities
+                    ?.filter { it.id() != UMinecraft.getMinecraft().player.uniqueID }
                     ?.map {
                         PlayerEntry(
                             it.id(),

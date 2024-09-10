@@ -1,5 +1,6 @@
 package io.github.singlerr.semaphore.client.gui.components.apps
 
+import gg.essential.elementa.UIComponent
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.ImageAspectConstraint
@@ -24,10 +25,10 @@ class AppCallReceiver(
     private val callResponseController: CallResponseController
 ) : UIApp(navigator), UIInteractor {
 
+    override val onShow: UIComponent.() -> Unit = { parent.unhide(true) }
+
     init {
-
         defaultConstraint()
-
         UIBlurredGradientBackground(delta = 0.0005f).constrain {
             x = 0.pixels()
             y = 0.pixels()
