@@ -20,6 +20,7 @@ open class UIApp(override val navigator: GuiNavigator) : UIComponent(), UINaviga
             }
         }
     }
+
     init {
         animateAfterUnhide { introAnimation() }
 

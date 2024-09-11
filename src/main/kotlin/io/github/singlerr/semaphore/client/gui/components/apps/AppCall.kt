@@ -1,7 +1,6 @@
 package io.github.singlerr.semaphore.client.gui.components.apps
 
 import gg.essential.elementa.UIComponent
-import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.ImageAspectConstraint
@@ -14,25 +13,29 @@ import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackgrou
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
 import io.github.singlerr.semaphore.client.gui.widgets.getPlayerProfile
+import io.github.singlerr.semaphore.client.gui.widgets.innerConstraint
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.controller.data.CallStateQuery
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
-import java.awt.Color
 import java.util.UUID
 
 class AppCall(
     navigator: GuiNavigator,
-    information: CallInformation,
-    callStateController: CallStateController
+    private val information: CallInformation,
+    callStateController: CallStateController,
+    fullConstraint: Boolean = true
 ) : UIApp(navigator), UIInteractor {
 
     override val onShow: UIComponent.() -> Unit = { parent.unhide() }
-
     private val background: UIComponent
 
     init {
-        defaultConstraint()
+        if (fullConstraint) {
+            defaultConstraint()
+        } else {
+            innerConstraint()
+        }
         background =
             UIBlurredGradientBackground(delta = 0.0005f).constrain {
                 x = 0.pixels()
@@ -78,28 +81,33 @@ class AppCall(
     }
 
     override fun shouldPresent(entity: Error?): Boolean = true
+    override fun shouldPresent(error: ErrorEntity?): Boolean = true
     override fun presentError(error: ErrorEntity?) {
-        navigator.pop()
+        error?.let {
+            if (it.message().startsWith("error.call.closed")) {
+                val infoSection =
+                    it.message()
+                        .substring(
+                            it.message().indexOf("error.call.closed") + "error.call.closed".length
+                        )
+                if (infoSection.isEmpty()) return@let
+
+                val args = infoSection.split("|")
+                val callerId = UUID.fromString(args[0])
+                val calleeId = UUID.fromString(args[1])
+
+                // Exit only related with me
+                if (information.callerId == callerId && information.calleeId == calleeId) {
+                    exit()
+                    return
+                }
+            }
+        }
         // Play sound here
     }
 
     override fun shouldPresent(entity: CallResponse?): Boolean = true
-    override fun present(entity: CallResponse?) {
-        if (entity?.responseType() == CallResponse.ResponseType.ACCEPT) {
-            replaceChild(
-                UIBlock(Color.GREEN).constrain {
-                    x = 0.pixels()
-                    y = 0.pixels()
-
-                    width = 100.percent()
-                    height = 100.percent()
-                },
-                background
-            )
-        } else {
-            exit()
-        }
-    }
+    override fun present(entity: CallResponse?) {}
 }
 
 data class CallInformation(val opponentId: UUID, val callerId: UUID, val calleeId: UUID)

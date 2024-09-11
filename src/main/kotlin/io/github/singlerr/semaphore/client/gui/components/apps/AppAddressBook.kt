@@ -75,7 +75,8 @@ class AppAddressBook(
                                         ),
                                     calleeInformation = CalleeInformation(entry.id, entry.name),
                                     callRequestController = callRequestController,
-                                    callStateController = callStateController
+                                    callStateController = callStateController,
+                                    fullConstraint = false
                                 )
                             )
                         }
@@ -85,16 +86,17 @@ class AppAddressBook(
         }
         entries.onSetValue(apply)
         apply(entries.getOrDefault(PlayerEntryList(emptyList())))
-        apply(
-            PlayerEntryList(
-                (0 until 10)
-                    .map {
-                        PresentableEntity(UUID.randomUUID(), PresentableEntity.State(0, HashMap()))
-                    }
-                    .map { PlayerEntry(it.id(), it.id().toString(), BasicState(0)) }
-                    .toList()
-            )
-        )
+        //        apply(
+        //            PlayerEntryList(
+        //                (0 until 10)
+        //                    .map {
+        //                        PresentableEntity(UUID.randomUUID(), PresentableEntity.State(0,
+        // HashMap()))
+        //                    }
+        //                    .map { PlayerEntry(it.id(), it.id().toString(), BasicState(0)) }
+        //                    .toList()
+        //            )
+        //        )
     }
 
     override fun shouldPresent(entities: List<PresentableEntity>?): Boolean = true

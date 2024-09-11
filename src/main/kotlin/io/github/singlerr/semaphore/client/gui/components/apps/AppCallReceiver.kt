@@ -14,6 +14,7 @@ import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
 import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackground
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
+import io.github.singlerr.semaphore.client.gui.widgets.innerConstraint
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.controller.CallResponseController
@@ -24,13 +25,19 @@ class AppCallReceiver(
     navigator: GuiNavigator,
     private val info: CallerInformation,
     private val callResponseController: CallResponseController,
-    private val callStateController: CallStateController
+    private val callStateController: CallStateController,
+    fullConstraint: Boolean = true
 ) : UIApp(navigator), UIInteractor {
 
     override val onShow: UIComponent.() -> Unit = { parent.unhide(true) }
 
     init {
-        defaultConstraint()
+        if (fullConstraint) {
+            defaultConstraint()
+        } else {
+            innerConstraint()
+        }
+
         UIBlurredGradientBackground(delta = 0.0005f).constrain {
             x = 0.pixels()
             y = 0.pixels()
@@ -108,8 +115,7 @@ class AppCallReceiver(
 
     override fun shouldPresent(entity: Error?): Boolean = true
 
-    override fun shouldPresent(error: ErrorEntity?): Boolean =
-        error?.message()?.startsWith("error.call.closed") == true
+    override fun shouldPresent(error: ErrorEntity?): Boolean = true
 
     override fun shouldPresent(
         error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
@@ -128,26 +134,7 @@ class AppCallReceiver(
     }
 
     override fun presentError(error: ErrorEntity?) {
-        error?.let {
-            if (it.message().startsWith("error.call.closed")) {
-                val infoSection =
-                    it.message()
-                        .substring(
-                            it.message().indexOf("error.call.closed") + "error.call.closed".length
-                        )
-                if (infoSection.isEmpty()) return@let
 
-                val args = infoSection.split("|")
-                val callerId = UUID.fromString(args[0])
-                val calleeId = UUID.fromString(args[1])
-
-                // Exit only related with me
-                if (info.id == callerId && calleeId == UMinecraft.getMinecraft().player.uniqueID) {
-                    exit()
-                    return
-                }
-            }
-        }
         exit()
     }
 }

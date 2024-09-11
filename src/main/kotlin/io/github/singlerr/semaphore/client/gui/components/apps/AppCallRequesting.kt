@@ -12,6 +12,7 @@ import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
 import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackground
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
+import io.github.singlerr.semaphore.client.gui.widgets.innerConstraint
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
@@ -24,7 +25,8 @@ class AppCallRequesting(
     callerInformation: CallerInformation,
     calleeInformation: CalleeInformation,
     private val callRequestController: CallRequestController,
-    private val callStateController: CallStateController
+    private val callStateController: CallStateController,
+    fullConstraint: Boolean = true
 ) : UIApp(navigator), UIInteractor {
 
     override val onShow: UIComponent.() -> Unit = { parent.unhide() }
@@ -32,7 +34,11 @@ class AppCallRequesting(
     private val background: UIComponent
 
     init {
-        defaultConstraint()
+        if (fullConstraint) {
+            defaultConstraint()
+        } else {
+            innerConstraint()
+        }
         background =
             UIBlurredGradientBackground(delta = 0.0005f).constrain {
                 x = 0.pixels()
@@ -79,13 +85,13 @@ class AppCallRequesting(
 
     override fun shouldPresent(entity: Error?): Boolean = true
     override fun presentError(error: ErrorEntity?) {
-       exit()
+        exit()
         // Play sound here
     }
 
     override fun shouldPresent(entity: CallResponse?): Boolean = true
     override fun present(entity: CallResponse?) {
-        exit()
+        navigator.pop()
         if (entity?.responseType() == CallResponse.ResponseType.ACCEPT) {
             navigator.push(
                 AppCall(
@@ -96,7 +102,8 @@ class AppCallRequesting(
                             callerId = entity.callerId(),
                             calleeId = entity.calleeId()
                         ),
-                    callStateController = callStateController
+                    callStateController = callStateController,
+                    fullConstraint = false
                 )
             )
         }

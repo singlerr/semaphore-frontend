@@ -118,6 +118,18 @@ fun lcmm(v: IntArray): Int {
     }
 }
 
+fun iterateToTop(start: UIComponent): Iterable<UIComponent> {
+    var iterable = mutableListOf<UIComponent>()
+    var current = start
+    iterable.add(current)
+    while (current.hasParent) {
+        iterable.add(current.parent)
+        current = current.parent
+    }
+
+    return iterable
+}
+
 data class Box(val x: Int, val y: Int, val width: Int, val height: Int)
 
 class GuiNavigator(
