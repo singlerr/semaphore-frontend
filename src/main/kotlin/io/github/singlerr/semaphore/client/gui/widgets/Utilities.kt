@@ -5,6 +5,7 @@ import gg.essential.elementa.UIComponent
 import gg.essential.elementa.dsl.*
 import gg.essential.universal.UMinecraft
 import io.github.singlerr.semaphore.client.gui.GuiPhoneScreen
+import io.github.singlerr.semaphore.client.sounds.SoundResource
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
@@ -12,6 +13,7 @@ import java.io.InputStream
 import java.util.UUID
 import javax.imageio.ImageIO
 import net.minecraft.client.resources.DefaultPlayerSkin
+import net.minecraft.client.resources.I18n
 import net.minecraft.util.ResourceLocation
 
 private val cache: MutableMap<ResourceLocation, BufferedImage> = mutableMapOf()
@@ -44,6 +46,11 @@ fun UIComponent.innerConstraint(): UIComponent {
         height = 100.percent()
     }
     return this
+}
+
+fun SoundResource.toTranslated(): String {
+    val path = ResourceLocation(name).path
+    return I18n.format("name.${path}")
 }
 
 fun UIComponent.defaultConstraint(parent: UIComponent): UIComponent {

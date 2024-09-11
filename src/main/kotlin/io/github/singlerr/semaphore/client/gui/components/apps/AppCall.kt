@@ -14,6 +14,8 @@ import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
 import io.github.singlerr.semaphore.client.gui.widgets.getPlayerProfile
 import io.github.singlerr.semaphore.client.gui.widgets.innerConstraint
+import io.github.singlerr.semaphore.client.sounds.SoundPlayerAccess
+import io.github.singlerr.semaphore.client.sounds.SoundResource
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.controller.data.CallStateQuery
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
@@ -28,6 +30,10 @@ class AppCall(
 ) : UIApp(navigator), UIInteractor {
 
     override val onShow: UIComponent.() -> Unit = { parent.unhide() }
+    override val onHide: UIComponent.() -> Unit = {
+        super.onHide(this)
+        SoundPlayerAccess.getInstance().playSound(SoundResource.CALL_CLOSE, 1.0f, 1.0f, false, true)
+    }
     private val background: UIComponent
 
     init {

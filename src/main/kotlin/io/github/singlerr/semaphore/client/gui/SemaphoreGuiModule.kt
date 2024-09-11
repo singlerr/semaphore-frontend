@@ -1,6 +1,8 @@
 package io.github.singlerr.semaphore.client.gui
 
 import io.github.singlerr.access.semaphore.client.gui.NonVanillaScreenAccess
+import io.github.singlerr.semaphore.client.sound.StubSoundPlayer
+import io.github.singlerr.semaphore.client.sounds.SoundPlayerAccess
 import io.github.singlerr.semaphore.config.ConfigurationManager
 import io.github.singlerr.semaphore.config.entry.ObservableConfigEntry
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
@@ -67,6 +69,10 @@ class SemaphoreGuiModule {
             params.callResponsePresenterRegistry?.accept(screen)
             params.errorPresenterRegistry?.accept(screen)
             return@setFactory screen
+        }
+
+        if (SoundPlayerAccess.getInstance() == null) {
+            SoundPlayerAccess.setInstance(StubSoundPlayer())
         }
     }
 

@@ -4,6 +4,8 @@ import gg.essential.elementa.state.BasicState
 import gg.essential.elementa.state.State
 import io.github.singlerr.semaphore.client.gui.components.apps.VolumeEntry
 import io.github.singlerr.semaphore.client.gui.components.apps.VolumeEntryList
+import io.github.singlerr.semaphore.client.sounds.NotificationType
+import io.github.singlerr.semaphore.client.sounds.SoundResource
 import io.github.singlerr.semaphore.config.entry.ObservableConfigEntry
 import io.github.singlerr.semaphore.interactors.admin.presenter.EntityPresenter
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
@@ -14,6 +16,11 @@ class ConfigHolder(private val config: ObservableConfigEntry<Map<String, Double>
     EntityPresenter {
 
     val volumeEntries: State<VolumeEntryList>
+    val notificationType: State<NotificationType> = BasicState(NotificationType.SOUND)
+    val systemVolumes: MutableMap<SoundResource, Float> =
+        mutableMapOf<SoundResource, Float>().also {
+            SoundResource.values().map { it to 1.0f }.toMap(it)
+        }
 
     init {
         val configEntries = config.get().toMutableMap()

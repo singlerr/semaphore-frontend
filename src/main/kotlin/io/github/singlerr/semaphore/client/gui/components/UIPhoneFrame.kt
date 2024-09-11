@@ -7,6 +7,8 @@ import io.github.singlerr.semaphore.client.ConfigHolder
 import io.github.singlerr.semaphore.client.gui.IMAGE_BACKGROUND
 import io.github.singlerr.semaphore.client.gui.components.apps.*
 import io.github.singlerr.semaphore.client.gui.widgets.*
+import io.github.singlerr.semaphore.client.sounds.SoundPlayerAccess
+import io.github.singlerr.semaphore.client.sounds.SoundResource
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
@@ -60,6 +62,10 @@ class UIPhoneFrame(
         onShow = {
             appContainer.unhide(true)
             grabWindowFocus()
+        }
+        onMouseClick {
+            SoundPlayerAccess.getInstance()
+                .playSound(SoundResource.INTERACTION, 1.0f, 1.0f, false, true)
         }
     }
 
@@ -123,6 +129,7 @@ class UIPhoneFrame(
                 listOf(
                     IconAddressBook(navigator, reqController, callStateController),
                     IconSettings(navigator, config),
+                    IconSystemSettings(navigator, config),
                     IconUserRegistration(navigator, entityController)
                 )
             }

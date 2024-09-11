@@ -15,6 +15,8 @@ import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackgrou
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
 import io.github.singlerr.semaphore.client.gui.widgets.innerConstraint
+import io.github.singlerr.semaphore.client.sounds.SoundPlayerAccess
+import io.github.singlerr.semaphore.client.sounds.SoundResource
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.controller.CallResponseController
@@ -29,8 +31,16 @@ class AppCallReceiver(
     fullConstraint: Boolean = true
 ) : UIApp(navigator), UIInteractor {
 
-    override val onShow: UIComponent.() -> Unit = { parent.unhide(true) }
-
+    override val onShow: UIComponent.() -> Unit = {
+        parent.unhide(true)
+        SoundPlayerAccess.getInstance().playSound(SoundResource.BELL, 1.0f, 1.0f, true, true)
+    }
+    override val onHide: UIComponent.() -> Unit = {
+        super.onHide(this)
+        SoundPlayerAccess.getInstance().stopSound(SoundResource.BELL)
+        SoundPlayerAccess.getInstance()
+            .playSound(SoundResource.CALL_REJECT, 1.0f, 1.0f, false, true)
+    }
     init {
         if (fullConstraint) {
             defaultConstraint()

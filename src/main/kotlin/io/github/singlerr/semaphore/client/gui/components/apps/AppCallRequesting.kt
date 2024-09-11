@@ -13,6 +13,8 @@ import io.github.singlerr.semaphore.client.gui.widgets.UIBlurredGradientBackgrou
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
 import io.github.singlerr.semaphore.client.gui.widgets.innerConstraint
+import io.github.singlerr.semaphore.client.sounds.SoundPlayerAccess
+import io.github.singlerr.semaphore.client.sounds.SoundResource
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
@@ -29,8 +31,17 @@ class AppCallRequesting(
     fullConstraint: Boolean = true
 ) : UIApp(navigator), UIInteractor {
 
-    override val onShow: UIComponent.() -> Unit = { parent.unhide() }
-
+    override val onShow: UIComponent.() -> Unit = {
+        parent.unhide()
+        SoundPlayerAccess.getInstance()
+            .playSound(SoundResource.REQUESTING_CALL, 1.0f, 1.0f, true, true)
+    }
+    override val onHide: UIComponent.() -> Unit = {
+        super.onHide(this)
+        SoundPlayerAccess.getInstance().stopSound(SoundResource.REQUESTING_CALL)
+        SoundPlayerAccess.getInstance()
+            .playSound(SoundResource.CALL_REJECT, 1.0f, 1.0f, false, true)
+    }
     private val background: UIComponent
 
     init {
@@ -89,6 +100,21 @@ class AppCallRequesting(
         // Play sound here
     }
 
+    override fun present(
+        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
+    ) {
+        error?.let {
+            if (it.reason().equals("error.call.timeout")) {
+                SoundPlayerAccess.getInstance()
+                    .playSound(SoundResource.TARGET_UNAVAILABLE, 1.0f, 1.0f, false, false)
+            } else if (it.reason().equals("error.target.already.in.call")) {
+                SoundPlayerAccess.getInstance()
+                    .playSound(SoundResource.RECEIVING_CALL, 1.0f, 1.0f, false, false)
+            }
+            exit()
+        }
+    }
+
     override fun shouldPresent(entity: CallResponse?): Boolean = true
     override fun present(entity: CallResponse?) {
         navigator.pop()
@@ -106,6 +132,9 @@ class AppCallRequesting(
                     fullConstraint = false
                 )
             )
+        } else {
+            SoundPlayerAccess.getInstance()
+                .playSound(SoundResource.TARGET_UNAVAILABLE, 1.0f, 1.0f, false, false)
         }
     }
 }

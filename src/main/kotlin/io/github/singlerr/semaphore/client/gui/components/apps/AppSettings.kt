@@ -23,6 +23,7 @@ class AppSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(navigat
         defaultConstraint()
 
         constrain { color = Color.WHITE.toConstraint() }
+
         val scrolls =
             ScrollComponent().constrain {
                 x = 0.pixels()

@@ -114,7 +114,6 @@ class GuiPhoneScreen(
     }
 
     override fun present(error: Error?) {
-        println(error)
         navigatorImpl.pages
             .filter { it is UIInteractor && it.shouldPresent(error) }
             .forEach { (it as UIInteractor).present(error) }

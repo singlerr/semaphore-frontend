@@ -91,6 +91,7 @@ dependencies {
     implementation("io.github.singlerr.semaphore:policy-impl:${semaphore_version}")
     implementation("io.github.singlerr.semaphore:config:${semaphore_version}")
     implementation("io.github.singlerr.semaphore:screen-adapter:${semaphore_version}")
+    implementation("io.github.singlerr.semaphore:sound-adapter:${semaphore_version}")
 
     implementation("io.github.singlerr.semaphore.callhandler:callhandler:${semaphore_base_version}")
     // DataGateways
