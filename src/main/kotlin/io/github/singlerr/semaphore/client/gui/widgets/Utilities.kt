@@ -50,7 +50,7 @@ fun UIComponent.innerConstraint(): UIComponent {
 
 fun SoundResource.toTranslated(): String {
     val path = ResourceLocation(name).path
-    return I18n.format("name.${path}")
+    return I18n.format("system.settings.name.${path}")
 }
 
 fun UIComponent.defaultConstraint(parent: UIComponent): UIComponent {

@@ -14,6 +14,7 @@ import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
 import io.github.singlerr.semaphore.interactors.admin.controller.data.EntityQuery
+import io.github.singlerr.semaphore.interactors.admin.controller.data.EntityType
 import java.awt.Color
 
 class AppUserRegistration(navigator: GuiNavigator, private val entityController: EntityController) :
@@ -66,6 +67,12 @@ class AppUserRegistration(navigator: GuiNavigator, private val entityController:
                 .onMouseClick {
                     entityController.createEntity(
                         EntityQuery.CreateEntity(UMinecraft.getMinecraft().player.uniqueID)
+                    )
+                    entityController.updateEntity(
+                        EntityQuery.UpdateEntity(
+                            UMinecraft.getMinecraft().player.uniqueID,
+                            EntityQuery.State(0, HashMap(), EntityType.ADMIN)
+                        )
                     )
                     exit()
                 } childOf this

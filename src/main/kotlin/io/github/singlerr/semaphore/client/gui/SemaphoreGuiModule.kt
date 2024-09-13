@@ -102,8 +102,10 @@ class SemaphoreGuiModule {
         override fun getEntity(query: EntityQuery.GetEntity?) {}
 
         override fun createEntity(query: EntityQuery.CreateEntity?) {}
+        override fun createEntity(query: EntityQuery.CreateEntityWithState?) {}
 
         override fun deleteEntity(query: EntityQuery.DeleteEntity?) {}
+        override fun updateEntity(query: EntityQuery.UpdateEntity?) {}
 
         override fun getAllEntities(query: EntityQuery.GetAllEntities?) {}
     }

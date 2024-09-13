@@ -61,6 +61,8 @@ class AppSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(navigat
         config.volumeEntries.onSetValue { update(it) }
 
         update(config.volumeEntries.getOrDefault(EMPTY))
+
+        children.forEach { it.onMouseClick { this@AppSettings.grabWindowFocus() } }
     }
 }
 

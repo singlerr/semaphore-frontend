@@ -20,6 +20,7 @@ import io.github.singlerr.semaphore.interactors.admin.controller.CallStateContro
 import io.github.singlerr.semaphore.interactors.admin.controller.data.CallStateQuery
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
+import io.github.singlerr.semaphore.interactors.caller.presenter.data.Error
 import java.util.UUID
 
 class AppCall(
@@ -90,12 +91,11 @@ class AppCall(
     override fun shouldPresent(error: ErrorEntity?): Boolean = true
     override fun presentError(error: ErrorEntity?) {
         error?.let {
-            if (it.message().startsWith("error.call.closed")) {
+            if (it.message.startsWith("error.call.closed")) {
                 val infoSection =
-                    it.message()
-                        .substring(
-                            it.message().indexOf("error.call.closed") + "error.call.closed".length
-                        )
+                    it.message.substring(
+                        it.message.indexOf("error.call.closed") + "error.call.closed".length
+                    )
                 if (infoSection.isEmpty()) return@let
 
                 val args = infoSection.split("|")

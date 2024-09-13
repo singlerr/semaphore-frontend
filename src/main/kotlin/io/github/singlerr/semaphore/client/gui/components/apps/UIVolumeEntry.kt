@@ -70,7 +70,7 @@ class UISystemVolumeEntry(
                 onBarPressed = {
                     currentSound =
                         SoundPlayerAccess.getInstance()
-                            .playSound(sound, 1.0f, getter(sound), true, true)
+                            .playSound(sound, 1.0f, getter(sound), 0, true, true)
                 },
                 onBarReleased = {
                     currentSound?.let { s -> SoundPlayerAccess.getInstance().stopSound(s) }

@@ -88,7 +88,7 @@ class ConfigHolder(private val config: ObservableConfigEntry<Map<String, Double>
 
     override fun present(entity: PresentableEntity?) {
         var map = config.get().toMutableMap()
-        if (!map.contains(entity?.id().toString())) map[entity?.id().toString()] = 0.5
+        if (!map.contains(entity?.id.toString())) map[entity?.id.toString()] = 0.5
 
         config.set(map)
     }
@@ -96,8 +96,8 @@ class ConfigHolder(private val config: ObservableConfigEntry<Map<String, Double>
     override fun present(entities: List<PresentableEntity?>?) {
         var map = config.get().toMutableMap()
         entities?.forEach { entity ->
-            if (!map.contains(entity?.id().toString())) {
-                map[entity?.id().toString()] = 0.5
+            if (!map.contains(entity?.id.toString())) {
+                map[entity?.id.toString()] = 0.5
             }
         }
         config.set(map)

@@ -21,6 +21,7 @@ import io.github.singlerr.semaphore.interactors.admin.controller.CallStateContro
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.controller.CallResponseController
 import io.github.singlerr.semaphore.interactors.callee.controller.data.CallResponse
+import io.github.singlerr.semaphore.interactors.caller.presenter.data.Error
 import java.util.UUID
 
 class AppCallReceiver(
@@ -127,19 +128,13 @@ class AppCallReceiver(
 
     override fun shouldPresent(error: ErrorEntity?): Boolean = true
 
-    override fun shouldPresent(
-        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
-    ): Boolean = true
-
     override fun error(
         entity: io.github.singlerr.semaphore.interactors.callee.presenter.data.Error?
     ) {
         exit()
     }
 
-    override fun present(
-        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
-    ) {
+    override fun present(error: Error?) {
         exit()
     }
 

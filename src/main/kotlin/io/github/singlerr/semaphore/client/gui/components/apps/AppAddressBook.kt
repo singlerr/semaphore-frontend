@@ -15,6 +15,7 @@ import io.github.singlerr.semaphore.client.gui.components.UIAppIcon
 import io.github.singlerr.semaphore.client.gui.components.UIInteractor
 import io.github.singlerr.semaphore.client.gui.widgets.*
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
+import io.github.singlerr.semaphore.interactors.admin.presenter.data.EntityType
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.PresentableEntity
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.controller.data.CallRequest
@@ -28,7 +29,7 @@ class AppAddressBook(
     private val callStateController: CallStateController
 ) : UIApp(navigator), UIInteractor {
 
-    override val onShow: UIComponent.() -> Unit = {}
+    override val onShow: UIComponent.() -> Unit = { grabWindowFocus() }
 
     init {
         defaultConstraint()
@@ -61,10 +62,6 @@ class AppAddressBook(
                     }
                     .also {
                         it.onClickRequestButton = {
-                            callRequestController.request(
-                                CallRequest(UMinecraft.getMinecraft().player.uniqueID, entry.id)
-                            )
-
                             navigator.push(
                                 AppCallRequesting(
                                     navigator = navigator,
@@ -79,24 +76,34 @@ class AppAddressBook(
                                     fullConstraint = false
                                 )
                             )
+
+                            callRequestController.request(
+                                CallRequest(UMinecraft.getMinecraft().player.uniqueID, entry.id)
+                            )
                         }
                     }
                     .onMouseClick { this@AppAddressBook.grabWindowFocus() } childOf entryList
             }
         }
+
+        // This allows exiting this app by pressing esc.
+        children.forEach { it.onMouseClick { this@AppAddressBook.grabWindowFocus() } }
         entries.onSetValue(apply)
-        apply(entries.getOrDefault(PlayerEntryList(emptyList())))
-        //        apply(
-        //            PlayerEntryList(
-        //                (0 until 10)
-        //                    .map {
-        //                        PresentableEntity(UUID.randomUUID(), PresentableEntity.State(0,
-        // HashMap()))
-        //                    }
-        //                    .map { PlayerEntry(it.id(), it.id().toString(), BasicState(0)) }
-        //                    .toList()
-        //            )
-        //        )
+        //        apply(entries.getOrDefault(PlayerEntryList(emptyList())))
+        //                apply(
+        //                    PlayerEntryList(
+        //                        (0 until 10)
+        //                            .map {
+        //                                PresentableEntity(UUID.randomUUID(),
+        // PresentableEntity.State(0,
+        //         HashMap(),
+        // io.github.singlerr.semaphore.interactors.access.database.EntityType.PLAYER))
+        //                            }
+        //                            .map { PlayerEntry(it.id, it.state.toString(), BasicState(0))
+        // }
+        //                            .toList()
+        //                    )
+        //                )
     }
 
     override fun shouldPresent(entities: List<PresentableEntity>?): Boolean = true
@@ -106,12 +113,17 @@ class AppAddressBook(
         entries.set(
             PlayerEntryList(
                 entities
-                    ?.filter { it.id() != UMinecraft.getMinecraft().player.uniqueID }
+                    ?.filter {
+                        it.state.entityType ==
+                            io.github.singlerr.semaphore.interactors.access.database.EntityType
+                                .PLAYER
+                    }
+                    ?.filter { it.id != UMinecraft.getMinecraft().player.uniqueID }
                     ?.map {
                         PlayerEntry(
-                            it.id(),
-                            getPlayerProfile(it.id())?.name ?: "",
-                            BasicState(it.state().missCallCount().getOrElse(it.id()) { 0 })
+                            it.id,
+                            getPlayerProfile(it.id)?.name ?: "Unknown",
+                            BasicState(it.state.missCallCount.getOrElse(it.id) { 0 })
                         )
                     }
                     ?.toList()
@@ -124,9 +136,9 @@ class AppAddressBook(
         entries
             .get()
             .entries
-            .find { it.id == entity?.id() }
+            .find { it.id == entity?.id }
             ?.missCallCount
-            ?.set(entity?.state()?.missCallCount()?.get(entity.id()) ?: return)
+            ?.set(entity?.state?.missCallCount?.get(entity.id) ?: return)
     }
 }
 

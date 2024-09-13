@@ -100,6 +100,8 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
                 height = 50.pixels()
             } childOf scrolls
         }
+
+        children.forEach { it.onMouseClick { this@AppSystemSettings.grabWindowFocus() } }
     }
 }
 

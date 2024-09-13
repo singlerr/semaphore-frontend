@@ -28,6 +28,19 @@ class StubSoundPlayer : SoundPlayer {
         }
     }
 
+    override fun playSound(
+        sound: SoundResource?,
+        pitch: Float,
+        volume: Float,
+        repeatDelay: Int,
+        repeat: Boolean,
+        stopPrevious: Boolean
+    ): SoundKey? {
+        return SoundKey(UUID.randomUUID(), sound) {
+            logger.info("Set volume of {} to {}", sound, it)
+        }
+    }
+
     override fun stopSound(soundKey: SoundKey?) {
         logger.info("Requested to stop sound {}", soundKey)
     }

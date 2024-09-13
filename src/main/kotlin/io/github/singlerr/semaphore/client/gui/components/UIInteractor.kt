@@ -7,6 +7,7 @@ import io.github.singlerr.semaphore.interactors.callee.presenter.CallResponsePre
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
 import io.github.singlerr.semaphore.interactors.caller.presenter.CallRequestPresenter
 import io.github.singlerr.semaphore.interactors.caller.presenter.ErrorPresenter
+import io.github.singlerr.semaphore.interactors.caller.presenter.data.Error
 import io.github.singlerr.semaphore.interactors.caller.presenter.data.InverseCallRequest
 
 interface UIInteractor :
@@ -17,10 +18,7 @@ interface UIInteractor :
     fun shouldPresent(error: ErrorEntity?): Boolean = false
     fun shouldPresent(request: InverseCallRequest?): Boolean = false
     fun shouldPresent(entity: CallResponse?): Boolean = false
-    fun shouldPresent(entity: Error?): Boolean = false
-    fun shouldPresent(
-        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
-    ) = false
+    fun shouldPresent(error: Error?) = false
 
     override fun presentError(error: ErrorEntity?) {}
     override fun present(entity: PresentableEntity?) {}

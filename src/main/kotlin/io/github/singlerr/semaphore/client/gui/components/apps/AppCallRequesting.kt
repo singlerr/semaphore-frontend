@@ -20,6 +20,7 @@ import io.github.singlerr.semaphore.interactors.admin.presenter.data.ErrorEntity
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallResponse
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.controller.data.CallRequest
+import io.github.singlerr.semaphore.interactors.caller.presenter.data.Error
 import java.util.UUID
 
 class AppCallRequesting(
@@ -99,19 +100,17 @@ class AppCallRequesting(
         exit()
         // Play sound here
     }
-
-    override fun present(
-        error: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
-    ) {
+    override fun present(error: Error?) {
         error?.let {
-            if (it.reason().equals("error.call.timeout")) {
+            if (it.reason.equals("error.call.timeout")) {
                 SoundPlayerAccess.getInstance()
                     .playSound(SoundResource.TARGET_UNAVAILABLE, 1.0f, 1.0f, false, false)
-            } else if (it.reason().equals("error.target.already.in.call")) {
+            } else if (it.reason.equals("error.target.already.in.call")) {
+                SoundPlayerAccess.getInstance().stopSound(SoundResource.REQUESTING_CALL)
                 SoundPlayerAccess.getInstance()
                     .playSound(SoundResource.RECEIVING_CALL, 1.0f, 1.0f, false, false)
             }
-            exit()
+            navigator.pop()
         }
     }
 

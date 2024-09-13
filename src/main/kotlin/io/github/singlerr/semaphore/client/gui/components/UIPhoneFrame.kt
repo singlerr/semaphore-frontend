@@ -3,6 +3,7 @@ package io.github.singlerr.semaphore.client.gui.components
 import gg.essential.elementa.UIComponent
 import gg.essential.elementa.constraints.ImageAspectConstraint
 import gg.essential.elementa.dsl.*
+import gg.essential.universal.UMinecraft
 import io.github.singlerr.semaphore.client.ConfigHolder
 import io.github.singlerr.semaphore.client.gui.IMAGE_BACKGROUND
 import io.github.singlerr.semaphore.client.gui.components.apps.*
@@ -81,8 +82,8 @@ class UIPhoneFrame(
                 navigator = navigator,
                 info =
                     CallerInformation(
-                        request!!.callerId(),
-                        getPlayerProfile(request.callerId())?.name!!
+                        request!!.callerId,
+                        getPlayerProfile(request.callerId)?.name!!
                     ),
                 callResponseController = callResponseController,
                 callStateController = callStateController
@@ -94,7 +95,8 @@ class UIPhoneFrame(
 
     override fun error(entity: Error?) {}
 
-    override fun shouldPresent(request: InverseCallRequest?): Boolean = true
+    override fun shouldPresent(request: InverseCallRequest?): Boolean =
+        request?.calleeId == UMinecraft.getMinecraft().player.uniqueID
 
     override fun shouldPresent(entities: List<PresentableEntity>?): Boolean {
         return true
@@ -104,7 +106,9 @@ class UIPhoneFrame(
         return true
     }
 
-    override fun shouldPresent(entity: kotlin.Error?): Boolean {
+    override fun shouldPresent(
+        entity: io.github.singlerr.semaphore.interactors.caller.presenter.data.Error?
+    ): Boolean {
         return true
     }
 
