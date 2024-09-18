@@ -39,8 +39,6 @@ class AppCallReceiver(
     override val onHide: UIComponent.() -> Unit = {
         super.onHide(this)
         SoundPlayerAccess.getInstance().stopSound(SoundResource.BELL)
-        SoundPlayerAccess.getInstance()
-            .playSound(SoundResource.CALL_REJECT, 1.0f, 1.0f, false, true)
     }
     init {
         if (fullConstraint) {
@@ -90,6 +88,8 @@ class AppCallReceiver(
                         CallResponse.Response.ACCEPT
                     )
                 )
+                SoundPlayerAccess.getInstance()
+                    .playSound(SoundResource.CALL_ACCEPT, 1.0f, 1.0f, false, true)
                 exit()
                 navigator.push(
                     AppCall(
@@ -120,6 +120,8 @@ class AppCallReceiver(
                         CallResponse.Response.REJECT
                     )
                 )
+                SoundPlayerAccess.getInstance()
+                    .playSound(SoundResource.CALL_REJECT, 1.0f, 1.0f, false, true)
                 navigator.pop()
             } childOf this
     }
