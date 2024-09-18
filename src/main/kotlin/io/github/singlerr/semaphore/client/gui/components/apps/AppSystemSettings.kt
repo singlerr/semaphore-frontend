@@ -92,13 +92,14 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
         val getter: (SoundResource) -> Float = { s -> config.systemVolumes[s]!! }
         val setter: (SoundResource, Float) -> Unit = { s, f -> config.systemVolumes[s] = f }
         config.systemVolumes.entries.forEach { entry ->
-            UISystemVolumeEntry(entry.key, getter, setter).constrain {
-                x = CenterConstraint()
-                y = SiblingConstraint(padding = 1f)
+            UISystemVolumeEntry(entry.key, getter, setter, repeatingDelay = entry.key.repeatDelay)
+                .constrain {
+                    x = CenterConstraint()
+                    y = SiblingConstraint(padding = 1f)
 
-                width = 100.pixels()
-                height = 50.pixels()
-            } childOf scrolls
+                    width = 100.pixels()
+                    height = 50.pixels()
+                } childOf scrolls
         }
 
         children.forEach { it.onMouseClick { this@AppSystemSettings.grabWindowFocus() } }

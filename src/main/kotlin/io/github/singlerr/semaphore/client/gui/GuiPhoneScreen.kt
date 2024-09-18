@@ -2,6 +2,7 @@ package io.github.singlerr.semaphore.client.gui
 
 import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.WindowScreen
+import gg.essential.elementa.components.Window
 import gg.essential.elementa.components.inspector.Inspector
 import gg.essential.elementa.dsl.*
 import io.github.singlerr.access.semaphore.client.gui.NonVanillaScreen
@@ -81,40 +82,52 @@ class GuiPhoneScreen(
     }
 
     override fun present(entities: MutableList<PresentableEntity>?) {
-        navigatorImpl.pages
-            .filter { it is UIInteractor && it.shouldPresent(entities) }
-            .forEach { (it as UIInteractor).present(entities) }
-        configHolder.present(entities)
+        Window.enqueueRenderOperation {
+            navigatorImpl.pages
+                .filter { it is UIInteractor && it.shouldPresent(entities) }
+                .forEach { (it as UIInteractor).present(entities) }
+            configHolder.present(entities)
+        }
     }
 
     override fun present(entity: PresentableEntity?) {
-        navigatorImpl.pages
-            .filter { it is UIInteractor && it.shouldPresent(entity) }
-            .forEach { (it as UIInteractor).present(entity) }
-        configHolder.present(entity)
+        Window.enqueueRenderOperation {
+            navigatorImpl.pages
+                .filter { it is UIInteractor && it.shouldPresent(entity) }
+                .forEach { (it as UIInteractor).present(entity) }
+            configHolder.present(entity)
+        }
     }
 
     override fun present(entity: CallResponse?) {
-        navigatorImpl.pages
-            .filter { it is UIInteractor && it.shouldPresent(entity) }
-            .forEach { (it as UIInteractor).present(entity) }
+        Window.enqueueRenderOperation {
+            navigatorImpl.pages
+                .filter { it is UIInteractor && it.shouldPresent(entity) }
+                .forEach { (it as UIInteractor).present(entity) }
+        }
     }
 
     override fun present(request: InverseCallRequest?) {
-        navigatorImpl.pages
-            .filter { it is UIInteractor && it.shouldPresent(request) }
-            .forEach { (it as UIInteractor).present(request) }
+        Window.enqueueRenderOperation {
+            navigatorImpl.pages
+                .filter { it is UIInteractor && it.shouldPresent(request) }
+                .forEach { (it as UIInteractor).present(request) }
+        }
     }
 
     override fun presentError(error: ErrorEntity?) {
-        navigatorImpl.pages
-            .filter { it is UIInteractor && it.shouldPresent(error) }
-            .forEach { (it as UIInteractor).presentError(error) }
+        Window.enqueueRenderOperation {
+            navigatorImpl.pages
+                .filter { it is UIInteractor && it.shouldPresent(error) }
+                .forEach { (it as UIInteractor).presentError(error) }
+        }
     }
 
     override fun present(error: Error?) {
-        navigatorImpl.pages
-            .filter { it is UIInteractor && it.shouldPresent(error) }
-            .forEach { (it as UIInteractor).present(error) }
+        Window.enqueueRenderOperation {
+            navigatorImpl.pages
+                .filter { it is UIInteractor && it.shouldPresent(error) }
+                .forEach { (it as UIInteractor).present(error) }
+        }
     }
 }

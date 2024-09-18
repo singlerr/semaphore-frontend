@@ -93,6 +93,7 @@ class UIPlayerEntry(entry: PlayerEntry, callRequestController: CallRequestContro
                 missCallCountText.hide(true)
             }
         }
+        entry.missCallCount.set(entry.missCallCount.get())
     }
 }
 

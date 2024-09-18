@@ -48,7 +48,8 @@ class UIVolumeEntry(val entry: VolumeEntry) : UIBlock(Color.DARK_GRAY) {
 class UISystemVolumeEntry(
     val sound: SoundResource,
     val getter: (SoundResource) -> Float,
-    val setter: (SoundResource, Float) -> Unit
+    val setter: (SoundResource, Float) -> Unit,
+    val repeatingDelay: Int = 0
 ) : UIBlock(Color.DARK_GRAY) {
 
     init {
@@ -70,7 +71,7 @@ class UISystemVolumeEntry(
                 onBarPressed = {
                     currentSound =
                         SoundPlayerAccess.getInstance()
-                            .playSound(sound, 1.0f, getter(sound), 0, true, true)
+                            .playSound(sound, 1.0f, getter(sound), repeatingDelay, true, true)
                 },
                 onBarReleased = {
                     currentSound?.let { s -> SoundPlayerAccess.getInstance().stopSound(s) }

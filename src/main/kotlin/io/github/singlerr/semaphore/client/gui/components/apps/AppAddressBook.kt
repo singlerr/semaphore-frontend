@@ -106,6 +106,12 @@ class AppAddressBook(
     override fun shouldPresent(entity: PresentableEntity?): Boolean = true
 
     override fun present(entities: MutableList<PresentableEntity>?) {
+        val countMap =
+            entities
+                ?.find { it.id == UMinecraft.getMinecraft().player.uniqueID }
+                ?.state
+                ?.missCallCount
+
         entries.set(
             PlayerEntryList(
                 entities
@@ -119,7 +125,7 @@ class AppAddressBook(
                         PlayerEntry(
                             it.id,
                             getPlayerProfile(it.id)?.name ?: "Unknown",
-                            BasicState(it.state.missCallCount.getOrElse(it.id) { 0 })
+                            BasicState(countMap?.get(it.id) ?: 0)
                         )
                     }
                     ?.toList()
@@ -129,12 +135,29 @@ class AppAddressBook(
     }
 
     override fun present(entity: PresentableEntity?) {
-        entries
-            .get()
-            .entries
-            .find { it.id == entity?.id }
-            ?.missCallCount
-            ?.set(entity?.state?.missCallCount?.get(entity.id) ?: return)
+        if (entity?.id == UMinecraft.getMinecraft().player.uniqueID) {
+            val countMap = entity.state.missCallCount
+            countMap.entries.forEach { (id, count) ->
+                {
+                    entries
+                        .get()
+                        .entries
+                        .find { it.id == id }
+                        ?.missCallCount
+                        ?.also { println(it) }
+                        ?.set(count)
+                }
+            }
+        } else {
+            entries
+                .get()
+                .entries
+                .find { it.id == entity?.id }
+                ?.missCallCount
+                ?.set(entity?.state?.missCallCount?.get(entity.id) ?: return)
+        }
+
+        entries.set(entries.get())
     }
 }
 
