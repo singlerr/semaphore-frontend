@@ -81,13 +81,9 @@ class AppAddressBook(
                                 CallRequest(UMinecraft.getMinecraft().player.uniqueID, entry.id)
                             )
                         }
-                    }
-                    .onMouseClick { this@AppAddressBook.grabWindowFocus() } childOf entryList
+                    } childOf entryList
             }
         }
-
-        // This allows exiting this app by pressing esc.
-        children.forEach { it.onMouseClick { this@AppAddressBook.grabWindowFocus() } }
         entries.onSetValue(apply)
         //        apply(entries.getOrDefault(PlayerEntryList(emptyList())))
         //                apply(

@@ -31,9 +31,13 @@ class UISoundSlider(
     private var isDragging = false
     private var barX: Float = 0f
 
+    private val barWay: UIBlock
+    private val barHandle: UIBlock
+    private var barGauge: UIBlock
+
     init {
 
-        val barWay =
+        barWay =
             UIBlock().constrain {
                 x = 5.pixels()
                 y = CenterConstraint()
@@ -44,20 +48,20 @@ class UISoundSlider(
                 color = barBackgroundColor.toConstraint()
             } childOf this
 
-        val barGauge =
+        barGauge =
             UIBlock().constrain {
                 x = 5.pixels()
                 y = CenterConstraint()
 
-                width = 0.pixels()
+                width = (map(defaultValue) * 100).percent() boundTo barWay
                 height = 10.pixels()
 
                 color = barColor.toConstraint()
             } childOf this
 
-        val barHandle =
+        barHandle =
             UIBlock().constrain {
-                x = 5.pixels()
+                x = (map(defaultValue) * 100).percent() boundTo barWay
                 y = CenterConstraint()
 
                 width = 10.pixels()
@@ -68,7 +72,7 @@ class UISoundSlider(
 
         val ghostBarHandle =
             UIBlock().constrain {
-                x = 5.pixels()
+                x = (map(defaultValue) * 100).percent() boundTo barWay
                 y = CenterConstraint()
 
                 width = 10.pixels()
@@ -120,6 +124,18 @@ class UISoundSlider(
         handle.set(map(defaultValue))
     }
 
+    //    override fun afterInitialization() {
+    //        super.afterInitialization()
+    //        val max = barWay.getRight() - this@UISoundSlider.getLeft() - barHandle.getWidth()
+    //        val min = barWay.getLeft() - this@UISoundSlider.getLeft()
+    //
+    //        val initialX = mapToRange(map(defaultValue), min, max)
+    //        barHandle.setX(initialX.pixels())
+    //        barGauge.setWidth((barHandle.getLeft() - barWay.getLeft()).pixels())
+    //    }
+
+    private fun mapToRange(p: Double, min: Float, max: Float): Float =
+        (min + p * (max - min)).toFloat()
     private fun mapToRange(p: Double, min: Int, max: Int): Int = (min + p * (max - min)).toInt()
     private fun map(p: Int): Double = (p - min) / (max - min).toDouble()
 }

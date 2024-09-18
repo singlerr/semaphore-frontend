@@ -1,6 +1,7 @@
 package io.github.singlerr.semaphore.client.gui.components
 
 import gg.essential.elementa.UIComponent
+import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.constraints.ImageAspectConstraint
 import gg.essential.elementa.dsl.*
 import gg.essential.universal.UMinecraft
@@ -19,6 +20,7 @@ import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallRespon
 import io.github.singlerr.semaphore.interactors.callee.presenter.data.Error
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.presenter.data.InverseCallRequest
+import java.awt.Color
 
 class UIPhoneFrame(
     override val navigator: GuiNavigator,
@@ -59,11 +61,34 @@ class UIPhoneFrame(
                 )
                 .defaultConstraint(this@UIPhoneFrame) childOf this
 
+        val backButton =
+            UIBlock(Color(0, 0, 0, 0))
+                .constrain {
+                    x = 5.pixels(alignOpposite = true)
+                    y = 5.pixels(alignOpposite = true)
+
+                    width = 25.pixels()
+                    height = 15.pixels()
+                }
+                .onMouseClick { if (navigator.last() !is UIPhoneFrame) navigator.pop() } childOf
+                this
+
+        val homeButton =
+            UIBlock(Color(0, 0, 0, 0))
+                .constrain {
+                    x = 35.pixels(alignOpposite = true)
+                    y = 5.pixels(alignOpposite = true)
+                    width = 35.pixels()
+                    height = 15.pixels()
+                }
+                .onMouseClick {
+                    while (navigator.last() !is UIPhoneFrame) {
+                        navigator.pop()
+                    }
+                } childOf this
+
         onHide = { appContainer.hide(true) }
-        onShow = {
-            appContainer.unhide(true)
-            grabWindowFocus()
-        }
+        onShow = { appContainer.unhide(true) }
         onMouseClick {
             SoundPlayerAccess.getInstance()
                 .playSound(SoundResource.INTERACTION, 1.0f, 1.0f, false, true)
@@ -86,7 +111,8 @@ class UIPhoneFrame(
                         getPlayerProfile(request.callerId)?.name!!
                     ),
                 callResponseController = callResponseController,
-                callStateController = callStateController
+                callStateController = callStateController,
+                fullConstraint = navigator.last() !is AppAddressBook
             )
         )
     }

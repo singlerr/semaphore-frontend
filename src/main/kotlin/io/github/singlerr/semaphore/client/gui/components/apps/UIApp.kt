@@ -6,7 +6,6 @@ import gg.essential.elementa.dsl.animate
 import gg.essential.elementa.dsl.pixels
 import io.github.singlerr.semaphore.client.gui.components.UINavigable
 import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
-import org.lwjgl.input.Keyboard
 
 open class UIApp(override val navigator: GuiNavigator) : UIComponent(), UINavigable {
 
@@ -23,9 +22,7 @@ open class UIApp(override val navigator: GuiNavigator) : UIComponent(), UINaviga
 
     init {
         animateAfterUnhide { introAnimation() }
-
         animateBeforeHide { outroAnimation() }
-        onKeyType { typedChar, keyCode -> if (keyCode == Keyboard.KEY_ESCAPE) exit() }
     }
 
     private fun introAnimation() {

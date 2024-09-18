@@ -19,7 +19,7 @@ class ConfigHolder(private val config: ObservableConfigEntry<Map<String, Double>
     val notificationType: State<NotificationType> = BasicState(NotificationType.SOUND)
     val systemVolumes: MutableMap<SoundResource, Float> =
         mutableMapOf<SoundResource, Float>().also {
-            SoundResource.values().map { it to 1.0f }.toMap(it)
+            SoundResource.values().map { it to 0.5f }.toMap(it)
         }
 
     init {

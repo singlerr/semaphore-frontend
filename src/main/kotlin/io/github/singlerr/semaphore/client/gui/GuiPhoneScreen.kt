@@ -44,7 +44,6 @@ class GuiPhoneScreen(
             if (this is UINavigable) {
                 this.onShow()
             }
-            grabWindowFocus()
             entityController.getAllEntities(EntityQuery.GetAllEntities())
             return@GuiNavigator
         }
