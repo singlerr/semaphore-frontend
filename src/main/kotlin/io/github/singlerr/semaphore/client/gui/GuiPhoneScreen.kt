@@ -11,6 +11,8 @@ import io.github.singlerr.semaphore.client.gui.components.UIInteractor
 import io.github.singlerr.semaphore.client.gui.components.UINavigable
 import io.github.singlerr.semaphore.client.gui.components.UIPhoneFrame
 import io.github.singlerr.semaphore.client.gui.widgets.*
+import io.github.singlerr.semaphore.client.sounds.SoundPlayerAccess
+import io.github.singlerr.semaphore.client.sounds.SoundResource
 import io.github.singlerr.semaphore.config.entry.ObservableConfigEntry
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
@@ -30,7 +32,7 @@ class GuiPhoneScreen(
     private val entityController: EntityController,
     private val callStateController: CallStateController,
     private val volumeConfig: ObservableConfigEntry<Map<String, Double>>
-) : WindowScreen(ElementaVersion.V6), UIInteractor, NonVanillaScreen {
+) : WindowScreen(ElementaVersion.V6, newGuiScale = 0), UIInteractor, NonVanillaScreen {
 
     private val configHolder = ConfigHolder(volumeConfig)
 
@@ -108,6 +110,7 @@ class GuiPhoneScreen(
     }
 
     override fun present(request: InverseCallRequest?) {
+        SoundPlayerAccess.getInstance().playSound(SoundResource.BELL, 1.0f, 1.0f, true, true)
         Window.enqueueRenderOperation {
             navigatorImpl.pages
                 .filter { it is UIInteractor && it.shouldPresent(request) }

@@ -1,6 +1,5 @@
 package io.github.singlerr.semaphore.client.gui.components.apps
 
-import gg.essential.elementa.UIComponent
 import gg.essential.elementa.components.ScrollComponent
 import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.constraints.CenterConstraint
@@ -28,8 +27,6 @@ class AppAddressBook(
     private val callRequestController: CallRequestController,
     private val callStateController: CallStateController
 ) : UIApp(navigator), UIInteractor {
-
-    override val onShow: UIComponent.() -> Unit = { grabWindowFocus() }
 
     init {
         defaultConstraint()

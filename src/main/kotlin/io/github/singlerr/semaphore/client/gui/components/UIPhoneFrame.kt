@@ -39,6 +39,7 @@ class UIPhoneFrame(
     override val onShow: UIComponent.() -> Unit
 
     init {
+
         constrain {
             x = 2.pixels()
             y = 2.pixels()
@@ -59,7 +60,7 @@ class UIPhoneFrame(
                             callStateController
                         )
                 )
-                .defaultConstraint(this@UIPhoneFrame) childOf this
+                .defaultConstraint() childOf this
 
         val backButton =
             UIBlock(Color(0, 0, 0, 0))
@@ -70,8 +71,15 @@ class UIPhoneFrame(
                     width = 25.pixels()
                     height = 15.pixels()
                 }
-                .onMouseClick { if (navigator.last() !is UIPhoneFrame) navigator.pop() } childOf
-                this
+                .onMouseClick {
+                    if (
+                        navigator.last() !is UIPhoneFrame &&
+                            navigator.last() !is AppCallReceiver &&
+                            navigator.last() !is AppCallRequesting &&
+                            navigator.last() !is AppCall
+                    )
+                        navigator.pop()
+                } childOf this
 
         val homeButton =
             UIBlock(Color(0, 0, 0, 0))
@@ -82,8 +90,14 @@ class UIPhoneFrame(
                     height = 15.pixels()
                 }
                 .onMouseClick {
-                    while (navigator.last() !is UIPhoneFrame) {
-                        navigator.pop()
+                    if (
+                        navigator.last() !is AppCallReceiver &&
+                            navigator.last() !is AppCallRequesting &&
+                            navigator.last() !is AppCall
+                    ) {
+                        while (navigator.last() !is UIPhoneFrame) {
+                            navigator.pop()
+                        }
                     }
                 } childOf this
 
