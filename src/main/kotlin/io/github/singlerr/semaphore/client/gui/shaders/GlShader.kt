@@ -2,8 +2,6 @@ package io.github.singlerr.semaphore.client.gui.shaders
 
 import gg.essential.universal.UGraphics
 import gg.essential.universal.shader.*
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import org.lwjgl.opengl.ARBShaderObjects
 import org.lwjgl.opengl.ARBShaderObjects.glGetUniformLocationARB
 import org.lwjgl.opengl.ARBShaderObjects.glShaderSourceARB
@@ -17,6 +15,8 @@ import org.lwjgl.opengl.GL20.GL_CURRENT_PROGRAM
 import org.lwjgl.opengl.GL20.glGetUniformLocation
 import org.lwjgl.opengl.GL20.glShaderSource
 import org.lwjgl.opengl.GL20.glValidateProgram
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 internal class GlShader(
     private val vertSource: String,
@@ -101,16 +101,22 @@ internal class GlShader(
 
     override fun getIntUniformOrNull(name: String) =
         getUniformLocation(name)?.let(::DirectIntUniform)
+
     override fun getFloatUniformOrNull(name: String) =
         getUniformLocation(name)?.let(::DirectFloatUniform)
+
     override fun getFloat2UniformOrNull(name: String) =
         getUniformLocation(name)?.let(::DirectFloat2Uniform)
+
     override fun getFloat3UniformOrNull(name: String) =
         getUniformLocation(name)?.let(::DirectFloat3Uniform)
+
     override fun getFloat4UniformOrNull(name: String) =
         getUniformLocation(name)?.let(::DirectFloat4Uniform)
+
     override fun getFloatMatrixUniformOrNull(name: String) =
         getUniformLocation(name)?.let(::DirectFloatMatrixUniform)
+
     override fun getSamplerUniformOrNull(name: String): SamplerUniform? {
         samplers[name]?.let {
             return it
@@ -220,12 +226,15 @@ internal class DirectFloatMatrixUniform(location: Int) :
             4 ->
                 if (GlShader.CORE) GL20.glUniformMatrix2(location, false, floatBuffer)
                 else ARBShaderObjects.glUniformMatrix2ARB(location, false, floatBuffer)
+
             9 ->
                 if (GlShader.CORE) GL20.glUniformMatrix3(location, false, floatBuffer)
                 else ARBShaderObjects.glUniformMatrix3ARB(location, false, floatBuffer)
+
             16 ->
                 if (GlShader.CORE) GL20.glUniformMatrix4(location, false, floatBuffer)
                 else ARBShaderObjects.glUniformMatrix4ARB(location, false, floatBuffer)
+
             else -> throw IllegalArgumentException()
         }
     }

@@ -47,5 +47,6 @@ open class UIApp(override val navigator: GuiNavigator) : UIComponent(), UINaviga
     open fun open() {
         navigator.push(this)
     }
+
     open fun exit(): UIComponent? = navigator.pop()
 }

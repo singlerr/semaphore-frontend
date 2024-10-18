@@ -8,11 +8,11 @@ import gg.essential.universal.shader.UShader
 import io.github.singlerr.semaphore.client.gui.SHADER_BLURRED_GRADIENT
 import io.github.singlerr.semaphore.client.gui.SHADER_PASS_THROUGH
 import io.github.singlerr.semaphore.client.gui.shaders.GlShader
+import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.lang.IllegalStateException
 import java.security.SecureRandom
 import kotlin.math.*
-import org.lwjgl.opengl.GL11
 
 class UIBlurredGradientBackground(private val delta: Float) : UIComponent() {
 
@@ -20,6 +20,7 @@ class UIBlurredGradientBackground(private val delta: Float) : UIComponent() {
     private val quadColors: MutableList<MutableColor>
     private val colorAppliers: MutableList<(Triple<Int, Int, Int>, MutableColor) -> Unit>
     private val random = SecureRandom()
+
     init {
         val templates: MutableList<(Triple<Int, Int, Int>, MutableColor) -> Unit> =
             mutableListOf(
@@ -205,6 +206,7 @@ internal class MutableColor(var red: Int, var green: Int, var blue: Int) {
             val c = Color.getHSBColor(h, s, v)
             return MutableColor(c.red, c.green, c.blue)
         }
+
         fun fromRGB(r: Int, g: Int, b: Int): MutableColor = MutableColor(r, g, b)
     }
 }

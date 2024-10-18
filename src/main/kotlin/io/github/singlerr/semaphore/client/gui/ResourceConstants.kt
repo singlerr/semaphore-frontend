@@ -2,8 +2,8 @@ package io.github.singlerr.semaphore.client.gui
 
 import gg.essential.elementa.font.FontRenderer
 import gg.essential.elementa.font.data.Font
-import java.util.UUID
 import net.minecraft.util.ResourceLocation
+import java.util.UUID
 
 // Images
 val IMAGE_BACKGROUND = ResourceLocation(MOD_ID, "textures/gui/phone_frame_bar.png")
@@ -17,6 +17,7 @@ val ICON_USER_REGISTRATION =
 val ICON_SETTINGS = ResourceLocation(MOD_ID, "textures/gui/icons/icon_settings.png")
 val ICON_ACCEPT_CALL = ResourceLocation(MOD_ID, "textures/gui/icons/icon_request_call.png")
 val ICON_REJECT_CALL = ResourceLocation(MOD_ID, "textures/gui/icons/icon_reject_call.png")
+
 // Shaders
 val SHADER_PASS_THROUGH = ResourceLocation(MOD_ID, "shader/passthrough.vsh")
 val SHADER_BLURRED_GRADIENT = ResourceLocation(MOD_ID, "shader/blurred_gradient.fsh")

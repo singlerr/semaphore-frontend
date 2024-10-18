@@ -13,9 +13,9 @@ import io.github.singlerr.semaphore.client.gui.ICON_REQUEST_CALL
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.controller.data.CallRequest
+import org.apache.commons.lang3.StringUtils
 import java.awt.Color
 import java.util.UUID
-import org.apache.commons.lang3.StringUtils
 
 class UIPlayerEntry(entry: PlayerEntry, callRequestController: CallRequestController) :
     UIBlock(Color.WHITE) {

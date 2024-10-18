@@ -14,12 +14,10 @@ import io.github.singlerr.semaphore.client.gui.components.UIAppIcon
 import io.github.singlerr.semaphore.client.gui.components.UIInteractor
 import io.github.singlerr.semaphore.client.gui.widgets.*
 import io.github.singlerr.semaphore.interactors.admin.controller.CallStateController
-import io.github.singlerr.semaphore.interactors.admin.presenter.data.EntityType
 import io.github.singlerr.semaphore.interactors.admin.presenter.data.PresentableEntity
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.controller.data.CallRequest
 import java.awt.Color
-import java.util.*
 
 class AppAddressBook(
     navigator: GuiNavigator,
@@ -63,10 +61,10 @@ class AppAddressBook(
                                 AppCallRequesting(
                                     navigator = navigator,
                                     callerInformation =
-                                        CallerInformation(
-                                            UMinecraft.getMinecraft().player.uniqueID,
-                                            UMinecraft.getMinecraft().player.name
-                                        ),
+                                    CallerInformation(
+                                        UMinecraft.getMinecraft().player.uniqueID,
+                                        UMinecraft.getMinecraft().player.name
+                                    ),
                                     calleeInformation = CalleeInformation(entry.id, entry.name),
                                     callRequestController = callRequestController,
                                     callStateController = callStateController,
@@ -114,8 +112,8 @@ class AppAddressBook(
                 entities
                     ?.filter {
                         it.state.entityType ==
-                            io.github.singlerr.semaphore.interactors.access.database.EntityType
-                                .PLAYER
+                                io.github.singlerr.semaphore.interactors.access.database.EntityType
+                                    .PLAYER
                     }
                     ?.filter { it.id != UMinecraft.getMinecraft().player.uniqueID }
                     ?.map {
@@ -166,8 +164,8 @@ class IconAddressBook(
     init {
         onMouseClick {
             addressBookInstance(
-                    AddressBookParams(navigator, callRequestController, callStateController)
-                )
+                AddressBookParams(navigator, callRequestController, callStateController)
+            )
                 .open()
         }
     }

@@ -71,7 +71,7 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
                             .toConstraint()
                 }
                 .onMouseClick { config.notificationType.set(NotificationType.VIBRATION) } childOf
-                this
+                    this
         UIText("Vibration").constrain {
             x = CenterConstraint() boundTo btnVibration
             y = CenterConstraint() boundTo btnVibration
@@ -113,8 +113,7 @@ class IconSystemSettings(navigator: GuiNavigator, config: ConfigHolder) :
     }
 }
 
-val systemSettingsInstance: (SystemSettingsParams) -> AppSystemSettings by Memoize {
-    params: SystemSettingsParams ->
+val systemSettingsInstance: (SystemSettingsParams) -> AppSystemSettings by Memoize { params: SystemSettingsParams ->
     AppSystemSettings(params.navigator, params.config)
 }
 

@@ -64,6 +64,7 @@ class ConfigHolder(private val config: ObservableConfigEntry<Map<String, Double>
                 }
                 .toList()
         )
+
     private fun map(config: ObservableConfigEntry<Map<String, Double>>): VolumeEntryList =
         VolumeEntryList(
             config

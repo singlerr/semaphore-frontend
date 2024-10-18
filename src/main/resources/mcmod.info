@@ -7,7 +7,9 @@
     "mcversion": "${minecraft_version}",
     "url": "",
     "updateUrl": "",
-    "authorList": ["${mod_authors}"],
+    "authorList": [
+      "${mod_authors}"
+    ],
     "credits": "${mod_authors}",
     "logoFile": "",
     "screenshots": [],

@@ -24,7 +24,6 @@ import io.github.singlerr.semaphore.interactors.callee.presenter.data.CallRespon
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.presenter.data.Error
 import io.github.singlerr.semaphore.interactors.caller.presenter.data.InverseCallRequest
-import java.util.*
 
 class GuiPhoneScreen(
     private val callRequestController: CallRequestController,
@@ -127,6 +126,9 @@ class GuiPhoneScreen(
     }
 
     override fun present(error: Error?) {
+        if (error?.reason == "error.call.closed.from.caller") {
+            SoundPlayerAccess.getInstance().stopSound(SoundResource.BELL)
+        }
         Window.enqueueRenderOperation {
             navigatorImpl.pages
                 .filter { it is UIInteractor && it.shouldPresent(error) }

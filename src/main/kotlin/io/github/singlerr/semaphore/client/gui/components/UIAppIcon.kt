@@ -11,8 +11,8 @@ import gg.essential.elementa.state.State
 import io.github.singlerr.semaphore.client.gui.BMJUA
 import io.github.singlerr.semaphore.client.gui.widgets.Box
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
-import java.awt.Color
 import net.minecraft.util.ResourceLocation
+import java.awt.Color
 
 open class UIAppIcon(
     resourceLocation: ResourceLocation,

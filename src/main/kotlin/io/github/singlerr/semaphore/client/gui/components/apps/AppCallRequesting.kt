@@ -100,6 +100,7 @@ class AppCallRequesting(
         exit()
         // Play sound here
     }
+
     override fun present(error: Error?) {
         error?.let {
             if (it.reason.equals("error.call.timeout")) {
@@ -122,11 +123,11 @@ class AppCallRequesting(
                 AppCall(
                     navigator = navigator,
                     information =
-                        CallInformation(
-                            opponentId = entity.calleeId(),
-                            callerId = entity.callerId(),
-                            calleeId = entity.calleeId()
-                        ),
+                    CallInformation(
+                        opponentId = entity.calleeId(),
+                        callerId = entity.callerId(),
+                        calleeId = entity.calleeId()
+                    ),
                     callStateController = callStateController,
                     fullConstraint = false
                 )

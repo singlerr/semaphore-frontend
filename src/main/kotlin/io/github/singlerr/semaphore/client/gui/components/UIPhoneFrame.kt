@@ -50,16 +50,16 @@ class UIPhoneFrame(
 
         val appContainer =
             UIAppContainer(
-                    navigator = navigator,
-                    apps =
-                        appList(
-                            navigator,
-                            callRequestController,
-                            entityController,
-                            config,
-                            callStateController
-                        )
+                navigator = navigator,
+                apps =
+                appList(
+                    navigator,
+                    callRequestController,
+                    entityController,
+                    config,
+                    callStateController
                 )
+            )
                 .defaultConstraint() childOf this
 
         val backButton =
@@ -74,9 +74,9 @@ class UIPhoneFrame(
                 .onMouseClick {
                     if (
                         navigator.last() !is UIPhoneFrame &&
-                            navigator.last() !is AppCallReceiver &&
-                            navigator.last() !is AppCallRequesting &&
-                            navigator.last() !is AppCall
+                        navigator.last() !is AppCallReceiver &&
+                        navigator.last() !is AppCallRequesting &&
+                        navigator.last() !is AppCall
                     )
                         navigator.pop()
                 } childOf this
@@ -92,8 +92,8 @@ class UIPhoneFrame(
                 .onMouseClick {
                     if (
                         navigator.last() !is AppCallReceiver &&
-                            navigator.last() !is AppCallRequesting &&
-                            navigator.last() !is AppCall
+                        navigator.last() !is AppCallRequesting &&
+                        navigator.last() !is AppCall
                     ) {
                         while (navigator.last() !is UIPhoneFrame) {
                             navigator.pop()
@@ -120,10 +120,10 @@ class UIPhoneFrame(
             AppCallReceiver(
                 navigator = navigator,
                 info =
-                    CallerInformation(
-                        request!!.callerId,
-                        getPlayerProfile(request.callerId)?.name!!
-                    ),
+                CallerInformation(
+                    request!!.callerId,
+                    getPlayerProfile(request.callerId)?.name!!
+                ),
                 callResponseController = callResponseController,
                 callStateController = callStateController,
                 fullConstraint = navigator.last() !is AppAddressBook
@@ -162,13 +162,13 @@ class UIPhoneFrame(
 
     companion object {
         private val appList:
-            (
-                GuiNavigator,
-                CallRequestController,
-                EntityController,
-                ConfigHolder,
-                CallStateController
-            ) -> List<UIAppIcon> =
+                    (
+            GuiNavigator,
+            CallRequestController,
+            EntityController,
+            ConfigHolder,
+            CallStateController
+        ) -> List<UIAppIcon> =
             { navigator, reqController, entityController, config, callStateController ->
                 listOf(
                     IconAddressBook(navigator, reqController, callStateController),

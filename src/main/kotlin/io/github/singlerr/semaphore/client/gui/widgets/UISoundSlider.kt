@@ -136,6 +136,7 @@ class UISoundSlider(
 
     private fun mapToRange(p: Double, min: Float, max: Float): Float =
         (min + p * (max - min)).toFloat()
+
     private fun mapToRange(p: Double, min: Int, max: Int): Int = (min + p * (max - min)).toInt()
     private fun map(p: Int): Double = (p - min) / (max - min).toDouble()
 }

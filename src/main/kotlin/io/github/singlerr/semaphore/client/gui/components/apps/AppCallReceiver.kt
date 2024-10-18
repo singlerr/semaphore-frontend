@@ -40,6 +40,7 @@ class AppCallReceiver(
         super.onHide(this)
         SoundPlayerAccess.getInstance().stopSound(SoundResource.BELL)
     }
+
     init {
         if (fullConstraint) {
             defaultConstraint()
@@ -95,11 +96,11 @@ class AppCallReceiver(
                     AppCall(
                         navigator = navigator,
                         information =
-                            CallInformation(
-                                opponentId = info.id,
-                                callerId = info.id,
-                                calleeId = UMinecraft.getMinecraft().player.uniqueID
-                            ),
+                        CallInformation(
+                            opponentId = info.id,
+                            callerId = info.id,
+                            calleeId = UMinecraft.getMinecraft().player.uniqueID
+                        ),
                         callStateController = callStateController
                     )
                 )
