@@ -27,11 +27,7 @@ interface UIInteractor :
     override fun present(entity: CallResponse?) {}
     override fun error(
         entity: io.github.singlerr.semaphore.interactors.callee.presenter.data.Error?
-    ) {
-    }
+    ) {}
 
-    override fun present(
-        error: Error?
-    ) {
-    }
+    override fun present(error: Error?) {}
 }

@@ -8,11 +8,11 @@ import gg.essential.elementa.constraints.animation.Animations
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.state.BasicState
 import gg.essential.elementa.state.State
-import io.github.singlerr.semaphore.client.gui.BMJUA
+import io.github.singlerr.semaphore.client.gui.FONT
 import io.github.singlerr.semaphore.client.gui.widgets.Box
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
-import net.minecraft.util.ResourceLocation
 import java.awt.Color
+import net.minecraft.util.ResourceLocation
 
 open class UIAppIcon(
     resourceLocation: ResourceLocation,
@@ -37,9 +37,9 @@ open class UIAppIcon(
             x = CenterConstraint()
             y = (-3).pixels(alignOpposite = true) boundTo iconImage
 
-            width = 20.pixels()
+            width = 25.pixels()
             height = 5.pixels()
-            fontProvider = BMJUA
+            fontProvider = FONT
 
             color = Color.BLACK.toConstraint()
         } childOf this

@@ -8,11 +8,11 @@ import gg.essential.universal.shader.UShader
 import io.github.singlerr.semaphore.client.gui.SHADER_BLURRED_GRADIENT
 import io.github.singlerr.semaphore.client.gui.SHADER_PASS_THROUGH
 import io.github.singlerr.semaphore.client.gui.shaders.GlShader
-import org.lwjgl.opengl.GL11
 import java.awt.Color
 import java.lang.IllegalStateException
 import java.security.SecureRandom
 import kotlin.math.*
+import org.lwjgl.opengl.GL11
 
 class UIBlurredGradientBackground(private val delta: Float) : UIComponent() {
 

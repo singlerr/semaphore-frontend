@@ -6,15 +6,15 @@ import gg.essential.elementa.dsl.*
 import gg.essential.universal.UMinecraft
 import io.github.singlerr.semaphore.client.gui.GuiPhoneScreen
 import io.github.singlerr.semaphore.client.sounds.SoundResource
-import net.minecraft.client.resources.DefaultPlayerSkin
-import net.minecraft.client.resources.I18n
-import net.minecraft.util.ResourceLocation
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.util.UUID
 import javax.imageio.ImageIO
+import net.minecraft.client.resources.DefaultPlayerSkin
+import net.minecraft.client.resources.I18n
+import net.minecraft.util.ResourceLocation
 
 private val cache: MutableMap<ResourceLocation, BufferedImage> = mutableMapOf()
 

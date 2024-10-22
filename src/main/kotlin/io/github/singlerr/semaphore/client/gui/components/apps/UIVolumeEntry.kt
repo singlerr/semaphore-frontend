@@ -10,6 +10,7 @@ import gg.essential.elementa.dsl.constrain
 import gg.essential.elementa.dsl.percent
 import gg.essential.elementa.dsl.pixels
 import gg.essential.elementa.state.State
+import io.github.singlerr.semaphore.client.gui.FONT
 import io.github.singlerr.semaphore.client.gui.widgets.UISlider
 import io.github.singlerr.semaphore.client.gui.widgets.UISoundSlider
 import io.github.singlerr.semaphore.client.gui.widgets.toTranslated
@@ -32,9 +33,9 @@ class UIVolumeEntry(val entry: VolumeEntry) : UIBlock(Color.DARK_GRAY) {
             } childOf this
 
         UISlider(
-            defaultValue = (entry.volume.get() * 100).toInt(),
-            onChange = { v -> entry.volume.set(v.toDouble() / 100) }
-        )
+                defaultValue = (entry.volume.get() * 100).toInt(),
+                onChange = { v -> entry.volume.set(v.toDouble() / 100) }
+            )
             .constrain {
                 x = 30.pixels()
                 y = CenterConstraint()
@@ -59,24 +60,26 @@ class UISystemVolumeEntry(
                 y = 3.pixels()
 
                 height = 10.pixels()
+
+                fontProvider = FONT
             } childOf this
 
         var currentSound: SoundKey? = null
         UISoundSlider(
-            defaultValue = (getter(sound) * 100).toInt(),
-            onChange = { v ->
-                setter(sound, v.toFloat() / 100)
-                currentSound?.volumeSetter?.accept(v.toFloat() / 100)
-            },
-            onBarPressed = {
-                currentSound =
-                    SoundPlayerAccess.getInstance()
-                        .playSound(sound, 1.0f, getter(sound), repeatingDelay, true, true)
-            },
-            onBarReleased = {
-                currentSound?.let { s -> SoundPlayerAccess.getInstance().stopSound(s) }
-            }
-        )
+                defaultValue = (getter(sound) * 100).toInt(),
+                onChange = { v ->
+                    setter(sound, v.toFloat() / 100)
+                    currentSound?.volumeSetter?.accept(v.toFloat() / 100)
+                },
+                onBarPressed = {
+                    currentSound =
+                        SoundPlayerAccess.getInstance()
+                            .playSound(sound, 1.0f, getter(sound), repeatingDelay, true, true)
+                },
+                onBarReleased = {
+                    currentSound?.let { s -> SoundPlayerAccess.getInstance().stopSound(s) }
+                }
+            )
             .constrain {
                 x = 5.pixels()
                 y = 17.pixels()

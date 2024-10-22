@@ -8,14 +8,15 @@ import gg.essential.elementa.constraints.ImageAspectConstraint
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.state.State
 import gg.essential.universal.UMinecraft
+import io.github.singlerr.semaphore.client.gui.FONT
 import io.github.singlerr.semaphore.client.gui.ICON_MISS_CALL
 import io.github.singlerr.semaphore.client.gui.ICON_REQUEST_CALL
 import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.interactors.caller.controller.CallRequestController
 import io.github.singlerr.semaphore.interactors.caller.controller.data.CallRequest
-import org.apache.commons.lang3.StringUtils
 import java.awt.Color
 import java.util.UUID
+import org.apache.commons.lang3.StringUtils
 
 class UIPlayerEntry(entry: PlayerEntry, callRequestController: CallRequestController) :
     UIBlock(Color.WHITE) {
@@ -42,6 +43,8 @@ class UIPlayerEntry(entry: PlayerEntry, callRequestController: CallRequestContro
                 y = 5.pixels()
 
                 textScale = (0.5).pixels()
+
+                fontProvider = FONT
             } childOf this
 
         val requestCallImage =
@@ -80,6 +83,8 @@ class UIPlayerEntry(entry: PlayerEntry, callRequestController: CallRequestContro
 
                 width = 2.pixels()
                 height = 2.pixels()
+
+                fontProvider = FONT
             } childOf missCallCountIndicator
 
         entry.missCallCount.onSetValue {

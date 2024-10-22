@@ -10,7 +10,6 @@ import io.github.singlerr.semaphore.client.gui.*
 import io.github.singlerr.semaphore.client.gui.components.UIAppIcon
 import io.github.singlerr.semaphore.client.gui.components.UIInteractor
 import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
-import io.github.singlerr.semaphore.client.gui.widgets.UIResourceImage
 import io.github.singlerr.semaphore.client.gui.widgets.defaultConstraint
 import io.github.singlerr.semaphore.interactors.admin.controller.EntityController
 import io.github.singlerr.semaphore.interactors.admin.controller.data.EntityQuery
@@ -22,14 +21,15 @@ class AppUserRegistration(navigator: GuiNavigator, private val entityController:
 
     init {
         defaultConstraint()
-
-        UIResourceImage(ICON_USER_REGISTRATION).constrain {
+        UIBlock(Color(230, 240, 240)).constrain {
             x = CenterConstraint()
-            y = 30.pixels()
-        } childOf this
+            y = CenterConstraint()
 
+            width = 100.percent()
+            height = 100.percent()
+        } childOf this
         val bgUser =
-            UIBlock(color = Color.BLUE)
+            UIBlock(color = Color(166, 252, 150))
                 .constrain {
                     x = CenterConstraint()
                     y = 60.pixels()
@@ -43,20 +43,24 @@ class AppUserRegistration(navigator: GuiNavigator, private val entityController:
                     )
                     exit()
                 } childOf this
-        UIText("Register as User").constrain {
-            x = CenterConstraint() boundTo bgUser
-            y = CenterConstraint() boundTo bgUser
+        UIText("Player")
+            .constrain {
+                x = CenterConstraint() boundTo bgUser
+                y = CenterConstraint() boundTo bgUser
 
-            width = 45.pixels()
-            height = 10.pixels()
+                width = 45.pixels()
+                height = 10.pixels()
 
-            fontProvider = BMJUA
+                fontProvider = FONT
 
-            color = Color.WHITE.toConstraint()
-        } childOf this
+                color = Color.WHITE.toConstraint()
+            }
+            .onMouseClick {
+                bgUser.mouseClick(it.absoluteX.toDouble(), it.absoluteY.toDouble(), it.mouseButton)
+            } childOf this
 
         val bgAdmin =
-            UIBlock(color = Color.BLUE)
+            UIBlock(color = Color(231, 135, 122))
                 .constrain {
                     x = CenterConstraint()
                     y = 100.pixels()
@@ -76,17 +80,20 @@ class AppUserRegistration(navigator: GuiNavigator, private val entityController:
                     )
                     exit()
                 } childOf this
+        UIText("Admin")
+            .constrain {
+                x = CenterConstraint() boundTo bgAdmin
+                y = CenterConstraint() boundTo bgAdmin
 
-        UIText("Register as Administrator").constrain {
-            x = CenterConstraint() boundTo bgAdmin
-            y = CenterConstraint() boundTo bgAdmin
+                width = 45.pixels()
+                height = 10.pixels()
 
-            width = 45.pixels()
-            height = 10.pixels()
-
-            fontProvider = BMJUA
-            color = Color.WHITE.toConstraint()
-        } childOf bgAdmin
+                fontProvider = FONT
+                color = Color.WHITE.toConstraint()
+            }
+            .onMouseClick {
+                bgAdmin.mouseClick(it.absoluteX.toDouble(), it.absoluteY.toDouble(), it.mouseButton)
+            } childOf this
     }
 }
 

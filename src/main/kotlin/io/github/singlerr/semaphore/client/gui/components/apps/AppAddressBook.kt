@@ -61,10 +61,10 @@ class AppAddressBook(
                                 AppCallRequesting(
                                     navigator = navigator,
                                     callerInformation =
-                                    CallerInformation(
-                                        UMinecraft.getMinecraft().player.uniqueID,
-                                        UMinecraft.getMinecraft().player.name
-                                    ),
+                                        CallerInformation(
+                                            UMinecraft.getMinecraft().player.uniqueID,
+                                            UMinecraft.getMinecraft().player.name
+                                        ),
                                     calleeInformation = CalleeInformation(entry.id, entry.name),
                                     callRequestController = callRequestController,
                                     callStateController = callStateController,
@@ -112,8 +112,8 @@ class AppAddressBook(
                 entities
                     ?.filter {
                         it.state.entityType ==
-                                io.github.singlerr.semaphore.interactors.access.database.EntityType
-                                    .PLAYER
+                            io.github.singlerr.semaphore.interactors.access.database.EntityType
+                                .PLAYER
                     }
                     ?.filter { it.id != UMinecraft.getMinecraft().player.uniqueID }
                     ?.map {
@@ -164,8 +164,8 @@ class IconAddressBook(
     init {
         onMouseClick {
             addressBookInstance(
-                AddressBookParams(navigator, callRequestController, callStateController)
-            )
+                    AddressBookParams(navigator, callRequestController, callStateController)
+                )
                 .open()
         }
     }

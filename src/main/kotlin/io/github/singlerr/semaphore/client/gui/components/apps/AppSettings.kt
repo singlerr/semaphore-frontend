@@ -1,13 +1,13 @@
 package io.github.singlerr.semaphore.client.gui.components.apps
 
 import gg.essential.elementa.components.ScrollComponent
+import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.SiblingConstraint
 import gg.essential.elementa.dsl.childOf
 import gg.essential.elementa.dsl.constrain
 import gg.essential.elementa.dsl.percent
 import gg.essential.elementa.dsl.pixels
-import gg.essential.elementa.dsl.toConstraint
 import gg.essential.elementa.state.BasicState
 import io.github.singlerr.semaphore.client.ConfigHolder
 import io.github.singlerr.semaphore.client.gui.ICON_SETTINGS
@@ -22,7 +22,13 @@ class AppSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(navigat
     init {
         defaultConstraint()
 
-        constrain { color = Color.WHITE.toConstraint() }
+        UIBlock(Color(230, 240, 240)).constrain {
+            x = CenterConstraint()
+            y = CenterConstraint()
+
+            width = 100.percent()
+            height = 100.percent()
+        } childOf this
 
         val scrolls =
             ScrollComponent().constrain {

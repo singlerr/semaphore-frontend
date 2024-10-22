@@ -15,6 +15,7 @@ import gg.essential.elementa.dsl.toConstraint
 import gg.essential.elementa.state.BasicState
 import gg.essential.elementa.state.toConstraint
 import io.github.singlerr.semaphore.client.ConfigHolder
+import io.github.singlerr.semaphore.client.gui.FONT
 import io.github.singlerr.semaphore.client.gui.ICON_SETTINGS
 import io.github.singlerr.semaphore.client.gui.Memoize
 import io.github.singlerr.semaphore.client.gui.components.UIAppIcon
@@ -28,8 +29,13 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
 
     init {
         defaultConstraint()
-        constrain { color = Color.WHITE.toConstraint() }
+        UIBlock(Color(230, 240, 240)).constrain {
+            x = CenterConstraint()
+            y = CenterConstraint()
 
+            width = 100.percent()
+            height = 100.percent()
+        } childOf this
         val btnSound =
             UIBlock()
                 .constrain {
@@ -52,6 +58,8 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
 
             width = 25.pixels()
             height = 15.pixels()
+
+            fontProvider = FONT
         } childOf btnSound
 
         val btnVibration =
@@ -71,13 +79,15 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
                             .toConstraint()
                 }
                 .onMouseClick { config.notificationType.set(NotificationType.VIBRATION) } childOf
-                    this
+                this
         UIText("Vibration").constrain {
             x = CenterConstraint() boundTo btnVibration
             y = CenterConstraint() boundTo btnVibration
 
-            width = 25.pixels()
+            width = 27.pixels()
             height = 15.pixels()
+
+            fontProvider = FONT
         } childOf btnVibration
 
         val scrolls =
@@ -113,7 +123,8 @@ class IconSystemSettings(navigator: GuiNavigator, config: ConfigHolder) :
     }
 }
 
-val systemSettingsInstance: (SystemSettingsParams) -> AppSystemSettings by Memoize { params: SystemSettingsParams ->
+val systemSettingsInstance: (SystemSettingsParams) -> AppSystemSettings by Memoize {
+    params: SystemSettingsParams ->
     AppSystemSettings(params.navigator, params.config)
 }
 

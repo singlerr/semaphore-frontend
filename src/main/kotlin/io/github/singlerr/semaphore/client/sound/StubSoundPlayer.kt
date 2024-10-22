@@ -3,8 +3,8 @@ package io.github.singlerr.semaphore.client.sound
 import io.github.singlerr.semaphore.client.sounds.SoundKey
 import io.github.singlerr.semaphore.client.sounds.SoundPlayer
 import io.github.singlerr.semaphore.client.sounds.SoundResource
-import org.apache.logging.log4j.LogManager
 import java.util.UUID
+import org.apache.logging.log4j.LogManager
 
 class StubSoundPlayer : SoundPlayer {
 

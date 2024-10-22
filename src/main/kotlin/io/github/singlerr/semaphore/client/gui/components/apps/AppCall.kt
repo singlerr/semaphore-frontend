@@ -5,7 +5,7 @@ import gg.essential.elementa.components.UIText
 import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.ImageAspectConstraint
 import gg.essential.elementa.dsl.*
-import io.github.singlerr.semaphore.client.gui.BMJUA
+import io.github.singlerr.semaphore.client.gui.FONT
 import io.github.singlerr.semaphore.client.gui.ICON_REJECT_CALL
 import io.github.singlerr.semaphore.client.gui.components.UIInteractor
 import io.github.singlerr.semaphore.client.gui.widgets.GuiNavigator
@@ -68,7 +68,7 @@ class AppCall(
             width = 45.pixels()
             height = 10.pixels()
 
-            fontProvider = BMJUA
+            fontProvider = FONT
         } childOf this
 
         UIResourceImage(ICON_REJECT_CALL)
