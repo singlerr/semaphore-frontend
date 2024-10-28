@@ -13,6 +13,7 @@ import gg.essential.elementa.dsl.toConstraint
 import gg.essential.elementa.state.BasicState
 import gg.essential.elementa.state.State
 import java.awt.Color
+import java.nio.charset.StandardCharsets
 
 class UISlider(
     private val min: Int = 0,
@@ -41,7 +42,7 @@ class UISlider(
 
                 color = barBackgroundColor.toConstraint()
             } childOf this
-
+        StandardCharsets.UTF_8
         val barGauge =
             UIBlock().constrain {
                 x = 5.pixels()

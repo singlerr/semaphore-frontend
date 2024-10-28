@@ -74,8 +74,16 @@ class AppSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(navigat
 
 private val EMPTY = VolumeEntryList(emptyList())
 
-class IconSettings(navigator: GuiNavigator, config: ConfigHolder) :
-    UIAppIcon(resourceLocation = ICON_SETTINGS, iconName = BasicState("Settings")) {
+class IconSettings(
+    navigator: GuiNavigator,
+    config: ConfigHolder,
+    allowLongLength: Boolean = false
+) :
+    UIAppIcon(
+        resourceLocation = ICON_SETTINGS,
+        iconName = BasicState("플레이어 볼륨"),
+        allowLongLength = allowLongLength
+    ) {
     init {
         onMouseClick { settingsInstance(SettingsParams(navigator, config)).open() }
     }

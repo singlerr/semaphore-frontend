@@ -160,7 +160,7 @@ class IconAddressBook(
     navigator: GuiNavigator,
     callRequestController: CallRequestController,
     callStateController: CallStateController
-) : UIAppIcon(resourceLocation = ICON_ADDRESS_BOOK, iconName = BasicState("Address")) {
+) : UIAppIcon(resourceLocation = ICON_ADDRESS_BOOK, iconName = BasicState("주소록")) {
     init {
         onMouseClick {
             addressBookInstance(

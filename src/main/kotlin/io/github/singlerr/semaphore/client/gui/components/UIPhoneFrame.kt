@@ -172,7 +172,7 @@ class UIPhoneFrame(
             { navigator, reqController, entityController, config, callStateController ->
                 listOf(
                     IconAddressBook(navigator, reqController, callStateController),
-                    IconSettings(navigator, config),
+                    IconSettings(navigator, config, allowLongLength = true),
                     IconSystemSettings(navigator, config),
                     IconUserRegistration(navigator, entityController)
                 )

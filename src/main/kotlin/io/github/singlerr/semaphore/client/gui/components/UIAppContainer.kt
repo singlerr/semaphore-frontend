@@ -50,7 +50,7 @@ class UIAppContainer(
             }
 
             icon.constrain {
-                x = SiblingConstraint(padding = 2f) + 2.pixels()
+                x = SiblingConstraint(7f) + 5.pixels()
                 width = 25.pixels()
                 height = 25.pixels()
             } childOf horizontalList!!
@@ -62,8 +62,8 @@ class UIAppContainer(
     private fun buildHorizontalContainer(parent: UIComponent): UIContainer =
         UIContainer().constrain {
             x = CenterConstraint()
-            y = SiblingConstraint(padding = 2f) + 5.pixels()
-            width = 100.percent()
+            y = SiblingConstraint(padding = 2f) + 15.pixels()
+            width = 99.percent()
             height = 25.pixels()
         } childOf parent
 }

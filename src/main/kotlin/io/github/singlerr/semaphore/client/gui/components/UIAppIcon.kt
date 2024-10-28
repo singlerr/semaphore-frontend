@@ -18,7 +18,8 @@ open class UIAppIcon(
     resourceLocation: ResourceLocation,
     iconName: State<String>,
     cutRange: Box? = null,
-) : UIBlock() {
+    val allowLongLength: Boolean = false
+) : UIBlock(color = Color(0, 0, 0, 0)) {
     init {
         onMouseEnter {
             animate { setYAnimation(Animations.OUT_CUBIC, 0.3f, 2.pixels(alignOpposite = true)) }
@@ -35,9 +36,14 @@ open class UIAppIcon(
 
         UIText(iconName, shadow = BasicState(false)).constrain {
             x = CenterConstraint()
-            y = (-3).pixels(alignOpposite = true) boundTo iconImage
+            y = (-7).pixels(alignOpposite = true) boundTo iconImage
 
-            width = 25.pixels()
+            width =
+                if (!allowLongLength) {
+                    20.pixels()
+                } else {
+                    30.pixels()
+                }
             height = 5.pixels()
             fontProvider = FONT
 

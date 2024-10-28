@@ -40,9 +40,9 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
             UIBlock()
                 .constrain {
                     x = 3.pixels()
-                    y = 5.pixels()
+                    y = 3.pixels()
 
-                    width = 50.percent() - 3.pixels()
+                    width = 50.percent() - 1.pixels()
                     height = 20.pixels()
 
                     color =
@@ -66,9 +66,9 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
             UIBlock()
                 .constrain {
                     x = 3.pixels(alignOpposite = true)
-                    y = 5.pixels()
+                    y = 3.pixels()
 
-                    width = 50.percent() - 3.pixels()
+                    width = 50.percent() - 1.pixels()
                     height = 20.pixels()
 
                     color =
@@ -107,7 +107,7 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
                     x = CenterConstraint()
                     y = SiblingConstraint(padding = 1f)
 
-                    width = 100.pixels()
+                    width = 100.percent()
                     height = 50.pixels()
                 } childOf scrolls
         }
@@ -117,7 +117,7 @@ class AppSystemSettings(navigator: GuiNavigator, config: ConfigHolder) : UIApp(n
 }
 
 class IconSystemSettings(navigator: GuiNavigator, config: ConfigHolder) :
-    UIAppIcon(resourceLocation = ICON_SETTINGS, iconName = BasicState("System Settings")) {
+    UIAppIcon(resourceLocation = ICON_SETTINGS, iconName = BasicState("기타 볼륨")) {
     init {
         onMouseClick { systemSettingsInstance(SystemSettingsParams(navigator, config)).open() }
     }
